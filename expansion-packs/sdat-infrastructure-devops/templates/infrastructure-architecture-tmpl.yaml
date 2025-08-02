@@ -1,6 +1,6 @@
 template:
     id: infrastructure-architecture-template-v2
-    name: Infrastructure Architecture
+    name: 基础设施架构
     version: 2.0
     output:
         format: markdown

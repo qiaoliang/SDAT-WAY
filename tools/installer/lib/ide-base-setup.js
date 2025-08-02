@@ -27,18 +27,18 @@ class BaseIdeSetup {
     }
 
     const allAgents = new Set();
-    
+
     // Get core agents
     const coreAgents = await this.getCoreAgentIds(installDir);
     coreAgents.forEach(id => allAgents.add(id));
-    
+
     // Get expansion pack agents
     const expansionPacks = await this.getInstalledExpansionPacks(installDir);
     for (const pack of expansionPacks) {
       const packAgents = await this.getExpansionPackAgents(pack.path);
       packAgents.forEach(id => allAgents.add(id));
     }
-    
+
     const result = Array.from(allAgents);
     this._agentCache.set(cacheKey, result);
     return result;
@@ -76,7 +76,7 @@ class BaseIdeSetup {
 
     // Use resource locator for efficient path finding
     let agentPath = await resourceLocator.getAgentPath(agentId);
-    
+
     if (!agentPath) {
       // Check installation-specific paths
       const possiblePaths = [
@@ -129,10 +129,10 @@ class BaseIdeSetup {
     }
 
     const expansionPacks = [];
-    
+
     // Check for dot-prefixed expansion packs
     const dotExpansions = await resourceLocator.findFiles(".sdat-*", { cwd: installDir });
-    
+
     for (const dotExpansion of dotExpansions) {
       if (dotExpansion !== ".sdat-core") {
         const packPath = path.join(installDir, dotExpansion);
@@ -143,7 +143,7 @@ class BaseIdeSetup {
         });
       }
     }
-    
+
     // Check other dot folders that have config.yaml
     const allDotFolders = await resourceLocator.findFiles(".*", { cwd: installDir });
     for (const folder of allDotFolders) {
@@ -171,7 +171,7 @@ class BaseIdeSetup {
     if (!(await fileManager.pathExists(agentsDir))) {
       return [];
     }
-    
+
     const agentFiles = await resourceLocator.findFiles("*.md", { cwd: agentsDir });
     return agentFiles.map(file => path.basename(file, ".md"));
   }
@@ -183,9 +183,9 @@ class BaseIdeSetup {
     const agentContent = await fileManager.readFile(agentPath);
     const agentTitle = await this.getAgentTitle(agentId, installDir);
     const yamlContent = extractYamlFromAgent(agentContent);
-    
+
     let content = "";
-    
+
     if (format === 'mdc') {
       // MDC format for Cursor
       content = "---\n";
@@ -194,24 +194,25 @@ class BaseIdeSetup {
       content += "alwaysApply: false\n";
       content += "---\n\n";
       content += `# ${agentId.toUpperCase()} Agent Rule\n\n`;
-      content += `This rule is triggered when the user types \`@${agentId}\` and activates the ${agentTitle} agent persona.\n\n`;
-      content += "## Agent Activation\n\n";
-      content += "CRITICAL: Read the full YAML, start activation to alter your state of being, follow startup section instructions, stay in this being until told to exit this mode:\n\n";
+      content += `当用户输入 \`@${agentId}\` 时，此规则将被触发并激活 ${agentTitle} 代理角色。\n\n`;
+      content += "## Agent 激活\n\n";
+      content += "关键提示：阅读完整的YAML，开始激活以改变你的状态，遵循启动部分的指示，保持这种状态直到被告知退出此模式：\n\n";
+
       content += "```yaml\n";
       content += yamlContent || agentContent.replace(/^#.*$/m, "").trim();
       content += "\n```\n\n";
       content += "## File Reference\n\n";
       const relativePath = path.relative(installDir, agentPath).replace(/\\/g, '/');
-      content += `The complete agent definition is available in [${relativePath}](mdc:${relativePath}).\n\n`;
-      content += "## Usage\n\n";
-      content += `When the user types \`@${agentId}\`, activate this ${agentTitle} persona and follow all instructions defined in the YAML configuration above.\n`;
+      content += `完整理的 agent 定义在 [${relativePath}](mdc:${relativePath}) 中.\n\n`;
+      content += "## 使用方法\n\n";
+      content += `当用户输入 \`@${agentId}\`, 会激活 ${agentTitle} 角色，并会遵守上面 yaml 文件定义的规则.\n`;
     } else if (format === 'claude') {
       // Claude Code format
       content = `# /${agentId} Command\n\n`;
-      content += `When this command is used, adopt the following agent persona:\n\n`;
+      content += `当这个命令被使用时, 会使用下面的 agent 角色:\n\n`;
       content += agentContent;
     }
-    
+
     return content;
   }
 

@@ -8,25 +8,18 @@
 
 ## 主要方法：
 
-使用markdown-tree自动[LLM: 首先，检查 {root}/core-config.yaml 中是否设置了 markdownExploder 为 true。如果是，尝试运行命令：`md-tree explode {input file} {output path}`。
+使用 markdown-tree 自动
 
-如果命令成功，通知用户文档已成功分片并停止 - 不要继续。
+### 任务流程指导
 
-如果命令失败（特别是出现命令未找到或不可用的错误），通知用户："markdownExploder 设置已启用但 md-tree 命令不可用。请：
+- 首先，检查 {root}/core-config.yaml 中是否设置了 markdownExploder 为 true。
+    - 如果 是 true，尝试运行命令：`md-tree explode {input file} {output path}`。
+        - 如果命令成功，通知用户"文档已成功分片并停止", 并且停下来，不用再采取行动了。
+        - 如果命令失败（特别是出现命令未找到或不可用的错误），通知用户："markdownExploder 设置已启用， 但 md-tree 命令不可用。请：全局安装 @kayvan/markdown-tree-parser：`npm install -g @kayvan/markdown-tree-parser` 或在 {root}/core-config.yaml 中将 markdownExploder 设置为 false"
 
-1. 全局安装 @kayvan/markdown-tree-parser：`npm install -g @kayvan/markdown-tree-parser`
-2. 或在 {root}/core-config.yaml 中将 markdownExploder 设置为 false
+        **重要：在此停住 - 在采取上述操作之一之前不要继续手动分片。**
 
-**重要：在此停止 - 在采取上述操作之一之前不要继续手动分片。**"
-
-如果 markdownExploder 设置为 false，通知用户："markdownExploder 设置当前为 false。为了更好的性能和可靠性，您应该：
-
-1. 在 {root}/core-config.yaml 中将 markdownExploder 设置为 true
-2. 全局安装 @kayvan/markdown-tree-parser：`npm install -g @kayvan/markdown-tree-parser`
-
-我现在将继续手动分片过程。"
-
-然后仅在 markdownExploder 为 false 时继续下面的手动方法。]
+    - 如果 markdownExploder 设置为 false，通知用户："markdownExploder 设置当前为 false。为了更好的性能和可靠性，您应该：1. 在 {root}/core-config.yaml 中将 markdownExploder 设置为 true 并全局安装 @kayvan/markdown-tree-parser：`npm install -g @kayvan/markdown-tree-parser`"
 
 ### 安装和使用
 

@@ -62,24 +62,24 @@ class WebBuilder {
 
         return `# Web Agent Bundle 指引
 
-You are now operating as a specialized AI agent from the SDAT-Method framework. This is a bundled web-compatible version containing all necessary resources for your role.
+你现在是 SDAT-Method 框架中的一名专业 AI agent。这是一个与 Web 兼容的捆绑版本，包含你角色所需的所有资源。
 
-## Important Instructions
+## 重要指令
 
-1. **Follow all startup commands**: Your agent configuration includes startup instructions that define your behavior, personality, and approach. These MUST be followed exactly.
+1. **遵循所有启动命令**：你的 agent 配置包括定义你行为、个性和方法的启动说明。这些必须严格遵守。
 
-2. **Resource Navigation**: This bundle contains all resources you need. Resources are marked with tags like:
+2. **资源导航**：此捆绑包包含你需要的所有资源。资源标有如下标签：
 
 - \`==================== START: ${examplePath} ====================\`
 - \`==================== END: ${examplePath} ====================\`
 
-When you need to reference a resource mentioned in your instructions:
+当你需要引用你指令中提到的资源时：
 
 - Look for the corresponding START/END tags
 - The format is always the full path with dot prefix (e.g., \`${personasExample}\`, \`${tasksExample}\`)
 - If a section is specified (e.g., \`{root}/tasks/create-story.md#section-name\`), navigate to that section within the file
 
-**Understanding YAML References**: In the agent configuration, resources are referenced in the dependencies section. For example:
+**理解 YAML 引用**：在 agent 配置中，资源在依赖项部分中引用。例如：
 
 \`\`\`yaml
 dependencies:
@@ -89,14 +89,14 @@ dependencies:
     - create-story
 \`\`\`
 
-These references map directly to bundle sections:
+这些引用直接映射到包部分：
 
 - \`utils: template-format\` → Look for \`==================== START: ${utilsExample} ====================\`
 - \`tasks: create-story\` → Look for \`==================== START: ${tasksRef} ====================\`
 
-3. **Execution Context**: You are operating in a web environment. All your capabilities and knowledge are contained within this bundle. Work within these constraints to provide the best possible assistance.
+3. **执行环境**：你正在 Web 环境中运行。你的所有能力和知识都包含在此捆绑包内。请在这些约束条件下，尽可能高效地提供协助。
 
-4. **Primary Directive**: Your primary goal is defined in your agent configuration below. Focus on fulfilling your designated role according to the SDAT-Method framework.
+4. **主要指令**：你的主要目标已在下方的代理配置中定义。请根据 SDAT-Method 框架，专注于履行你指定的角色。
 
 ---
 

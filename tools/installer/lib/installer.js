@@ -23,9 +23,7 @@ class Installer {
             const packageJson = require(packagePath);
             return packageJson.version;
         } catch (error) {
-            console.warn(
-                "Could not read version from package.json, using 'unknown'"
-            );
+            console.warn("无法从 package.json 读取版本，使用 'unknown'");
             return "unknown";
         }
     }
@@ -50,13 +48,13 @@ class Installer {
 
             // Log resolved path for clarity
             if (!path.isAbsolute(config.directory)) {
-                spinner.text = `Resolving "${config.directory}" to: ${installDir}`;
+                spinner.text = `解析 "${config.directory}" 到: ${installDir}`;
             }
 
             // Check if directory exists and handle non-existent directories
             if (!(await fileManager.pathExists(installDir))) {
                 spinner.stop();
-                console.log(`\nThe directory ${installDir} does not exist.`);
+                console.log(`\n目录 ${installDir} 不存在。`);
 
                 const { action } = await inquirer.prompt([
                     {
@@ -81,7 +79,7 @@ class Installer {
                 ]);
 
                 if (action === "cancel") {
-                    console.log("Installation cancelled.");
+                    console.log("安装已取消。");
                     process.exit(0);
                 } else if (action === "change") {
                     const { newDirectory } = await inquirer.prompt([
@@ -103,19 +101,15 @@ class Installer {
                 } else if (action === "create") {
                     try {
                         await fileManager.ensureDirectory(installDir);
-                        console.log(`✓ Created directory: ${installDir}`);
+                        console.log(`✓ 已创建目录: ${installDir}`);
                     } catch (error) {
-                        console.error(
-                            `Failed to create directory: ${error.message}`
-                        );
-                        console.error(
-                            "You may need to check permissions or use a different path."
-                        );
+                        console.error(`创建目录失败: ${error.message}`);
+                        console.error("您可能需要检查权限或使用不同的路径。");
                         process.exit(1);
                     }
                 }
 
-                spinner.start("Analyzing installation directory...");
+                spinner.start("正在分析安装目录...");
             }
 
             // If this is an update request from early detection, handle it directly
@@ -129,8 +123,8 @@ class Installer {
                         spinner
                     );
                 } else {
-                    spinner.fail("No existing V2 installation found to update");
-                    throw new Error("No existing V2 installation found");
+                    spinner.fail("未找到可更新的现有 V2 安装");
+                    throw new Error("未找到现有 V2 安装");
                 }
             }
 
@@ -173,9 +167,9 @@ class Installer {
         } catch (error) {
             // Check if modules were initialized
             if (spinner) {
-                spinner.fail("Installation failed");
+                spinner.fail("安装失败");
             } else {
-                console.error("Installation failed:", error.message);
+                console.error("安装失败:", error.message);
             }
             throw error;
         }
@@ -245,13 +239,13 @@ class Installer {
     }
 
     async performFreshInstall(config, installDir, spinner, options = {}) {
-        spinner.text = "Installing SDAT Method...";
+        spinner.text = "正在安装 SDAT Method...";
 
         let files = [];
 
         if (config.installType === "full") {
             // Full installation - copy entire .sdat-core folder as a subdirectory
-            spinner.text = "Copying complete .sdat-core folder...";
+            spinner.text = "正在复制完整的 .sdat-core 文件夹...";
             const sourceDir = resourceLocator.getSdatCorePath();
             const sdatCoreDestDir = path.join(installDir, ".sdat-core");
             await fileManager.copyDirectoryWithRootReplacement(
@@ -261,7 +255,7 @@ class Installer {
             );
 
             // Copy common/ items to .sdat-core
-            spinner.text = "Copying common utilities...";
+            spinner.text = "正在复制通用工具...";
             await this.copyCommonItems(installDir, ".sdat-core", spinner);
 
             // Get list of all files for manifest
@@ -273,7 +267,7 @@ class Installer {
             files = foundFiles.map((file) => path.join(".sdat-core", file));
         } else if (config.installType === "single-agent") {
             // Single agent installation
-            spinner.text = `Installing ${config.agent} agent...`;
+            spinner.text = `正在安装 ${config.agent} 代理...`;
 
             // Copy agent file with {root} replacement
             const agentPath = configLoader.getAgentPath(config.agent);
@@ -296,7 +290,7 @@ class Installer {
             const sourceBase = resourceLocator.getSdatCorePath();
 
             for (const dep of dependencies) {
-                spinner.text = `Copying dependency: ${dep}`;
+                spinner.text = `正在复制依赖: ${dep}`;
 
                 if (dep.includes("*")) {
                     // Handle glob patterns with {root} replacement
@@ -350,7 +344,7 @@ class Installer {
             files.push(...commonFiles);
         } else if (config.installType === "team") {
             // Team installation
-            spinner.text = `Installing ${config.team} team...`;
+            spinner.text = `正在安装 ${config.team} 团队...`;
 
             // Get team dependencies
             const teamDependencies = await configLoader.getTeamDependencies(
@@ -360,7 +354,7 @@ class Installer {
 
             // Install all team dependencies
             for (const dep of teamDependencies) {
-                spinner.text = `Copying team dependency: ${dep}`;
+                spinner.text = `正在复制团队依赖: ${dep}`;
 
                 if (dep.includes("*")) {
                     // Handle glob patterns with {root} replacement
@@ -405,7 +399,7 @@ class Installer {
             }
 
             // Copy common/ items to .sdat-core
-            spinner.text = "Copying common utilities...";
+            spinner.text = "正在复制通用工具...";
             const commonFiles = await this.copyCommonItems(
                 installDir,
                 ".sdat-core",
@@ -415,7 +409,7 @@ class Installer {
         } else if (config.installType === "expansion-only") {
             // Expansion-only installation - DO NOT create .sdat-core
             // Only install expansion packs
-            spinner.text = "Installing expansion packs only...";
+            spinner.text = "仅安装扩展包...";
         }
 
         // Install expansion packs if requested
@@ -429,7 +423,7 @@ class Installer {
 
         // Install web bundles if requested
         if (config.includeWebBundles && config.webBundlesDirectory) {
-            spinner.text = "Installing web bundles...";
+            spinner.text = "正在安装 Web 包...";
             // Resolve web bundles directory using the same logic as the main installation directory
             const originalCwd =
                 process.env.INIT_CWD || process.env.PWD || process.cwd();
@@ -449,7 +443,7 @@ class Installer {
         const ides = config.ides || (config.ide ? [config.ide] : []);
         if (ides.length > 0) {
             for (const ide of ides) {
-                spinner.text = `Setting up ${ide} integration...`;
+                spinner.text = `正在设置 ${ide} 集成...`;
                 const preConfiguredSettings =
                     ide === "github-copilot"
                         ? config.githubCopilotConfig
@@ -470,17 +464,17 @@ class Installer {
             (config.prdSharded !== undefined ||
                 config.architectureSharded !== undefined)
         ) {
-            spinner.text = "Configuring document sharding settings...";
+            spinner.text = "正在配置文档分片设置...";
             await fileManager.modifyCoreConfig(installDir, config);
         }
 
         // Create manifest (skip for expansion-only installations)
         if (config.installType !== "expansion-only") {
-            spinner.text = "Creating installation manifest...";
+            spinner.text = "正在创建安装清单...";
             await fileManager.createManifest(installDir, config, files);
         }
 
-        spinner.succeed("Installation complete!");
+        spinner.succeed("安装完成！");
         this.showSuccessMessage(config, installDir, options);
     }
 
@@ -491,18 +485,18 @@ class Installer {
         const newVersion = await this.getCoreVersion();
         const versionCompare = this.compareVersions(currentVersion, newVersion);
 
-        console.log(chalk.yellow("\n🔍 Found existing SDAT V2 installation"));
-        console.log(`   Directory: ${installDir}`);
-        console.log(`   Current version: ${currentVersion}`);
-        console.log(`   Available version: ${newVersion}`);
+        console.log(chalk.yellow("\n🔍 发现现有 SDAT V2 安装"));
+        console.log(`   目录: ${installDir}`);
+        console.log(`   当前版本: ${currentVersion}`);
+        console.log(`   可用版本: ${newVersion}`);
         console.log(
-            `   Installed: ${new Date(
+            `   安装时间: ${new Date(
                 state.manifest.installed_at
             ).toLocaleDateString()}`
         );
 
         // Check file integrity
-        spinner.start("Checking installation integrity...");
+        spinner.start("正在检查安装完整性...");
         const integrity = await fileManager.checkFileIntegrity(
             installDir,
             state.manifest
@@ -514,10 +508,10 @@ class Installer {
         const hasIntegrityIssues = hasMissingFiles || hasModifiedFiles;
 
         if (hasIntegrityIssues) {
-            console.log(chalk.red("\n⚠️  Installation issues detected:"));
+            console.log(chalk.red("\n⚠️  检测到安装问题:"));
             if (hasMissingFiles) {
                 console.log(
-                    chalk.red(`   Missing files: ${integrity.missing.length}`)
+                    chalk.red(`   缺失文件: ${integrity.missing.length}`)
                 );
                 if (integrity.missing.length <= 5) {
                     integrity.missing.forEach((file) =>
@@ -527,9 +521,7 @@ class Installer {
             }
             if (hasModifiedFiles) {
                 console.log(
-                    chalk.yellow(
-                        `   Modified files: ${integrity.modified.length}`
-                    )
+                    chalk.yellow(`   已修改文件: ${integrity.modified.length}`)
                 );
                 if (integrity.modified.length <= 5) {
                     integrity.modified.forEach((file) =>
@@ -541,7 +533,7 @@ class Installer {
 
         // Show existing expansion packs
         if (Object.keys(state.expansionPacks).length > 0) {
-            console.log(chalk.cyan("\n📦 Installed expansion packs:"));
+            console.log(chalk.cyan("\n📦 已安装的扩展包:"));
             for (const [packId, packInfo] of Object.entries(
                 state.expansionPacks
             )) {
@@ -550,7 +542,7 @@ class Installer {
                         `   - ${packId} (v${packInfo.manifest.version || "unknown"})`
                     );
                 } else {
-                    console.log(`   - ${packId} (no manifest)`);
+                    console.log(`   - ${packId} (无清单)`);
                 }
             }
         }
@@ -558,37 +550,35 @@ class Installer {
         let choices = [];
 
         if (versionCompare < 0) {
-            console.log(chalk.cyan("\n⬆️  Upgrade available for SDAT core"));
+            console.log(chalk.cyan("\n⬆️  SDAT 核心有可用更新"));
             choices.push({
-                name: `Upgrade SDAT core (v${currentVersion} → v${newVersion})`,
+                name: `升级 SDAT 核心 (v${currentVersion} → v${newVersion})`,
                 value: "upgrade",
             });
         } else if (versionCompare === 0) {
             if (hasIntegrityIssues) {
                 // Offer repair option when files are missing or modified
                 choices.push({
-                    name: "Repair installation (restore missing/modified files)",
+                    name: "修复安装 (恢复缺失/已修改的文件)",
                     value: "repair",
                 });
             }
-            console.log(chalk.yellow("\n⚠️  Same version already installed"));
+            console.log(chalk.yellow("\n⚠️  已安装相同版本"));
             choices.push({
-                name: `Force reinstall SDAT core (v${currentVersion} - reinstall)`,
+                name: `强制重新安装 SDAT 核心 (v${currentVersion} - 重新安装)`,
                 value: "reinstall",
             });
         } else {
-            console.log(
-                chalk.yellow("\n⬇️  Installed version is newer than available")
-            );
+            console.log(chalk.yellow("\n⬇️  已安装版本比可用版本更新"));
             choices.push({
-                name: `Downgrade SDAT core (v${currentVersion} → v${newVersion})`,
+                name: `降级 SDAT 核心 (v${currentVersion} → v${newVersion})`,
                 value: "reinstall",
             });
         }
 
         choices.push(
-            { name: "Add/update expansion packs only", value: "expansions" },
-            { name: "Cancel", value: "cancel" }
+            { name: "仅添加/更新扩展包", value: "expansions" },
+            { name: "取消", value: "cancel" }
         );
 
         const { action } = await inquirer.prompt([
@@ -626,7 +616,7 @@ class Installer {
                     await resourceLocator.getExpansionPacks();
 
                 if (availableExpansionPacks.length === 0) {
-                    console.log(chalk.yellow("No expansion packs available."));
+                    console.log(chalk.yellow("没有可用的扩展包。"));
                     return;
                 }
 
@@ -645,23 +635,21 @@ class Installer {
                 ]);
 
                 if (selectedPacks.length === 0) {
-                    console.log(chalk.yellow("No expansion packs selected."));
+                    console.log(chalk.yellow("未选择任何扩展包。"));
                     return;
                 }
 
-                spinner.start("Installing expansion packs...");
+                spinner.start("正在安装扩展包...");
                 const expansionFiles = await this.installExpansionPacks(
                     installDir,
                     selectedPacks,
                     spinner,
                     { ides: config.ides || [] }
                 );
-                spinner.succeed("Expansion packs installed successfully!");
+                spinner.succeed("扩展包安装成功！");
 
-                console.log(chalk.green("\n✓ Installation complete!"));
-                console.log(
-                    chalk.green(`✓ Expansion packs installed/updated:`)
-                );
+                console.log(chalk.green("\n✓ 安装完成！"));
+                console.log(chalk.green(`✓ 扩展包已安装/更新:`));
                 for (const packId of selectedPacks) {
                     console.log(chalk.green(`  - ${packId} → .${packId}/`));
                 }
@@ -676,12 +664,8 @@ class Installer {
     async handleV1Installation(config, installDir, state, spinner) {
         spinner.stop();
 
-        console.log(
-            chalk.yellow(
-                "\n🔍 Found SDAT V1 installation (sdat-agent/ directory)"
-            )
-        );
-        console.log(`   Directory: ${installDir}`);
+        console.log(chalk.yellow("\n🔍 发现 SDAT V1 安装 (sdat-agent/ 目录)"));
+        console.log(`   目录: ${installDir}`);
 
         const { action } = await inquirer.prompt([
             {
@@ -701,9 +685,7 @@ class Installer {
 
         switch (action) {
             case "upgrade": {
-                console.log(
-                    chalk.cyan("\n📦 Starting V1 to V2 upgrade process...")
-                );
+                console.log(chalk.cyan("\n📦 开始 V1 到 V2 升级过程..."));
                 const V1ToV2Upgrader = require("../../upgraders/V1-to-V2-upgrader");
                 const upgrader = new V1ToV2Upgrader();
                 return await upgrader.upgrade({
@@ -718,7 +700,7 @@ class Installer {
                     spinner
                 );
             case "cancel":
-                console.log("Installation cancelled.");
+                console.log("安装已取消。");
                 return;
         }
     }
@@ -726,14 +708,14 @@ class Installer {
     async handleUnknownInstallation(config, installDir, state, spinner) {
         spinner.stop();
 
-        console.log(chalk.yellow("\n⚠️  Directory contains existing files"));
-        console.log(`   Directory: ${installDir}`);
+        console.log(chalk.yellow("\n⚠️  目录包含现有文件"));
+        console.log(`   目录: ${installDir}`);
 
         if (state.hasSdatCore) {
-            console.log("   Found: .sdat-core directory (but no manifest)");
+            console.log("   发现: .sdat-core 目录 (但无清单)");
         }
         if (state.hasOtherFiles) {
-            console.log("   Found: Other files in directory");
+            console.log("   发现: 目录中的其他文件");
         }
 
         const { action } = await inquirer.prompt([
@@ -781,7 +763,7 @@ class Installer {
     }
 
     async performUpdate(newConfig, installDir, manifest, spinner) {
-        spinner.start("Checking for updates...");
+        spinner.start("正在检查更新...");
 
         try {
             // Get current and new versions
@@ -795,7 +777,7 @@ class Installer {
             // Only check for modified files if it's an actual version upgrade
             let modifiedFiles = [];
             if (versionCompare !== 0) {
-                spinner.text = "Checking for modified files...";
+                spinner.text = "正在检查已修改的文件...";
                 modifiedFiles = await fileManager.checkModifiedFiles(
                     installDir,
                     manifest
@@ -803,10 +785,8 @@ class Installer {
             }
 
             if (modifiedFiles.length > 0) {
-                spinner.warn("Found modified files");
-                console.log(
-                    chalk.yellow("\nThe following files have been modified:")
-                );
+                spinner.warn("发现已修改的文件");
+                console.log(chalk.yellow("\n以下文件已被修改:"));
                 for (const file of modifiedFiles) {
                     console.log(`  - ${file}`);
                 }
@@ -828,19 +808,19 @@ class Installer {
                 ]);
 
                 if (action === "cancel") {
-                    console.log("Update cancelled.");
+                    console.log("更新已取消。");
                     return;
                 }
 
                 if (action === "backup") {
-                    spinner.start("Backing up modified files...");
+                    spinner.start("正在备份已修改的文件...");
                     for (const file of modifiedFiles) {
                         const filePath = path.join(installDir, file);
                         const backupPath =
                             await fileManager.backupFile(filePath);
                         console.log(
                             chalk.dim(
-                                `  Backed up: ${file} → ${path.basename(backupPath)}`
+                                `  已备份: ${file} → ${path.basename(backupPath)}`
                             )
                         );
                     }
@@ -850,8 +830,8 @@ class Installer {
             // Perform update by re-running installation
             spinner.text =
                 versionCompare === 0
-                    ? "Reinstalling files..."
-                    : "Updating files...";
+                    ? "正在重新安装文件..."
+                    : "正在更新文件...";
             const config = {
                 installType: manifest.install_type,
                 agent: manifest.agent,
@@ -864,21 +844,21 @@ class Installer {
             });
 
             // Clean up .yml files that now have .yaml counterparts
-            spinner.text = "Cleaning up legacy .yml files...";
+            spinner.text = "正在清理遗留的 .yml 文件...";
             await this.cleanupLegacyYmlFiles(installDir, spinner);
         } catch (error) {
-            spinner.fail("Update failed");
+            spinner.fail("更新失败");
             throw error;
         }
     }
 
     async performRepair(config, installDir, manifest, integrity, spinner) {
-        spinner.start("Preparing to repair installation...");
+        spinner.start("正在准备修复安装...");
 
         try {
             // Back up modified files
             if (integrity.modified.length > 0) {
-                spinner.text = "Backing up modified files...";
+                spinner.text = "正在备份已修改的文件...";
                 for (const file of integrity.modified) {
                     const filePath = path.join(installDir, file);
                     if (await fileManager.pathExists(filePath)) {
@@ -886,7 +866,7 @@ class Installer {
                             await fileManager.backupFile(filePath);
                         console.log(
                             chalk.dim(
-                                `  Backed up: ${file} → ${path.basename(backupPath)}`
+                                `  已备份: ${file} → ${path.basename(backupPath)}`
                             )
                         );
                     }
@@ -894,7 +874,7 @@ class Installer {
             }
 
             // Restore missing and modified files
-            spinner.text = "Restoring files...";
+            spinner.text = "正在恢复文件...";
             const sourceBase = resourceLocator.getSdatCorePath();
             const filesToRestore = [
                 ...integrity.missing,
@@ -928,13 +908,13 @@ class Installer {
                     );
                     await fileManager.ensureDirectory(path.dirname(destPath));
                     await fs.writeFile(destPath, updatedContent, "utf8");
-                    spinner.text = `Restored: ${file}`;
+                    spinner.text = `已恢复: ${file}`;
                 } else {
                     // Regular file from sdat-core
                     const sourcePath = path.join(sourceBase, relativePath);
                     if (await fileManager.pathExists(sourcePath)) {
                         await fileManager.copyFile(sourcePath, destPath);
-                        spinner.text = `Restored: ${file}`;
+                        spinner.text = `已恢复: ${file}`;
 
                         // If this is a .yaml file, check for and remove corresponding .yml file
                         if (file.endsWith(".yaml")) {
@@ -945,16 +925,14 @@ class Installer {
                                 await fs.unlink(ymlPath);
                                 console.log(
                                     chalk.dim(
-                                        `  Removed legacy: ${ymlFile} (replaced by ${file})`
+                                        `  已移除遗留: ${ymlFile} (被 ${file} 替换)`
                                     )
                                 );
                             }
                         }
                     } else {
                         console.warn(
-                            chalk.yellow(
-                                `  Warning: Source file not found: ${file}`
-                            )
+                            chalk.yellow(`  警告: 未找到源文件: ${file}`)
                         );
                     }
                 }
@@ -964,21 +942,21 @@ class Installer {
             spinner.text = "Cleaning up legacy .yml files...";
             await this.cleanupLegacyYmlFiles(installDir, spinner);
 
-            spinner.succeed("Repair completed successfully!");
+            spinner.succeed("修复完成！");
 
             // Show summary
-            console.log(chalk.green("\n✓ Installation repaired!"));
+            console.log(chalk.green("\n✓ 安装已修复！"));
             if (integrity.missing.length > 0) {
                 console.log(
                     chalk.green(
-                        `  Restored ${integrity.missing.length} missing files`
+                        `  已恢复 ${integrity.missing.length} 个缺失文件`
                     )
                 );
             }
             if (integrity.modified.length > 0) {
                 console.log(
                     chalk.green(
-                        `  Restored ${integrity.modified.length} modified files (backups created)`
+                        `  已恢复 ${integrity.modified.length} 个已修改文件 (已创建备份)`
                     )
                 );
             }
@@ -988,32 +966,32 @@ class Installer {
             if (ides.includes("cursor")) {
                 console.log(
                     chalk.yellow.bold(
-                        "\n⚠️  IMPORTANT: Cursor Custom Modes Update Required"
+                        "\n⚠️  重要提示：需要更新 Cursor 自定义模式"
                     )
                 );
                 console.log(
                     chalk.yellow(
-                        "Since agent files have been repaired, you need to update any custom agent modes configured in the Cursor custom agent GUI per the Cursor docs."
+                        "由于代理文件已被修复，您需要根据 Cursor 文档，在 Cursor 自定义代理 GUI 中更新所有已配置的自定义代理模式。"
                     )
                 );
             }
         } catch (error) {
-            spinner.fail("Repair failed");
+            spinner.fail("修复失败");
             throw error;
         }
     }
 
     async performReinstall(config, installDir, spinner) {
-        spinner.start("Preparing to reinstall SDAT Method...");
+        spinner.start("正在准备重新安装 SDAT Method...");
 
         // Remove existing .sdat-core
         const sdatCorePath = path.join(installDir, ".sdat-core");
         if (await fileManager.pathExists(sdatCorePath)) {
-            spinner.text = "Removing existing installation...";
+            spinner.text = "正在移除现有安装...";
             await fileManager.removeDirectory(sdatCorePath);
         }
 
-        spinner.text = "Installing fresh copy...";
+        spinner.text = "正在安装新副本...";
         const result = await this.performFreshInstall(
             config,
             installDir,
@@ -1029,7 +1007,7 @@ class Installer {
     }
 
     showSuccessMessage(config, installDir, options = {}) {
-        console.log(chalk.green("\n✓ SDAT Method installed successfully!\n"));
+        console.log(chalk.green("\n✓ SDAT Method 安装成功！\n"));
 
         const ides = config.ides || (config.ide ? [config.ide] : []);
         if (ides.length > 0) {
@@ -1037,31 +1015,29 @@ class Installer {
                 const ideConfig = configLoader.getIdeConfiguration(ide);
                 if (ideConfig?.instructions) {
                     console.log(
-                        chalk.bold(`To use SDAT agents in ${ideConfig.name}:`)
+                        chalk.bold(`要在 ${ideConfig.name} 中使用 SDAT 代理:`)
                     );
                     console.log(ideConfig.instructions);
                 }
             }
         } else {
-            console.log(chalk.yellow("No IDE configuration was set up."));
+            console.log(chalk.yellow("未设置 IDE 配置。"));
             console.log(
-                "You can manually configure your IDE using the agent files in:",
+                "您可以使用以下目录中的代理文件手动配置您的 IDE:",
                 installDir
             );
         }
 
         // Information about installation components
-        console.log(chalk.bold("\n🎯 Installation Summary:"));
+        console.log(chalk.bold("\n🎯 安装摘要:"));
         if (config.installType !== "expansion-only") {
             console.log(
-                chalk.green(
-                    "✓ .sdat-core framework installed with all agents and workflows"
-                )
+                chalk.green("✓ .sdat-core 框架已安装，包含所有代理和工作流")
             );
         }
 
         if (config.expansionPacks && config.expansionPacks.length > 0) {
-            console.log(chalk.green(`✓ Expansion packs installed:`));
+            console.log(chalk.green(`✓ 已安装扩展包:`));
             for (const packId of config.expansionPacks) {
                 console.log(chalk.green(`  - ${packId} → .${packId}/`));
             }
@@ -1079,7 +1055,7 @@ class Installer {
                 : path.resolve(originalCwd, config.webBundlesDirectory);
             console.log(
                 chalk.green(
-                    `✓ Web bundles (${bundleInfo}) installed to: ${resolvedWebBundlesDir}`
+                    `✓ Web 包 (${bundleInfo}) 已安装到: ${resolvedWebBundlesDir}`
                 )
             );
         }
@@ -1092,38 +1068,29 @@ class Installer {
                 })
                 .join(", ");
             console.log(
-                chalk.green(
-                    `✓ IDE rules and configurations set up for: ${ideNames}`
-                )
+                chalk.green(`✓ 已为以下 IDE 设置规则和配置: ${ideNames}`)
             );
         }
 
         // Information about web bundles
         if (!config.includeWebBundles) {
-            console.log(chalk.bold("\n📦 Web Bundles Available:"));
+            console.log(chalk.bold("\n📦 Web 包可用:"));
+            console.log("预构建的 Web 包可用，可以稍后添加:");
+            console.log(chalk.cyan("  再次运行安装程序以将它们添加到您的项目"));
             console.log(
-                "Pre-built web bundles are available and can be added later:"
+                "这些包可以独立工作，可以共享、移动或在其他项目中作为独立文件使用。"
             );
-            console.log(
-                chalk.cyan(
-                    "  Run the installer again to add them to your project"
-                )
-            );
-            console.log(
-                "These bundles work independently and can be shared, moved, or used"
-            );
-            console.log("in other projects as standalone files.");
         }
 
         if (config.installType === "single-agent") {
             console.log(
                 chalk.dim(
-                    "\nNeed other agents? Run: npx sdat-method install --agent=<name>"
+                    "\n需求其它 agents? 运行: npm i -g sdat-method && sdat-method install --agent=<name>"
                 )
             );
             console.log(
                 chalk.dim(
-                    "Need everything? Run: npx sdat-method install --full"
+                    "需求所有 agents? 运行: npm i -g sdat-method && sdat-method install --full"
                 )
             );
         }
@@ -1132,12 +1099,12 @@ class Installer {
         if (options.isUpdate && ides.includes("cursor")) {
             console.log(
                 chalk.yellow.bold(
-                    "\n⚠️  IMPORTANT: Cursor Custom Modes Update Required"
+                    "\n⚠️ 重要提示：Cursor 自定义代理模式需要更新"
                 )
             );
             console.log(
                 chalk.yellow(
-                    "Since agents have been updated, you need to update any custom agent modes configured in the Cursor custom agent GUI per the Cursor docs."
+                    "由于代理已被更新，您需要根据 Cursor 文档，在 Cursor 自定义代理 GUI 中更新所有已配置的自定义代理模式。"
                 )
             );
         }
@@ -1145,21 +1112,21 @@ class Installer {
         // Important notice to read the user guide
         console.log(
             chalk.red.bold(
-                "\n📖 IMPORTANT: Please read the user guide installed at .sdat-core/user-guide.md"
+                "\n📖 重要提示：请阅读已安装在 .sdat-core/user-guide.md 的用户指南"
             )
         );
         console.log(
             chalk.red(
-                "This guide contains essential information about the SDAT workflow and how to use the agents effectively."
+                "本指南包含有关 SDAT 工作流及如何高效使用各代理的关键信息。"
             )
         );
     }
 
     // Legacy method for backward compatibility
     async update() {
-        console.log(chalk.yellow('The "update" command is deprecated.'));
+        console.log(chalk.yellow('"update" 命令已弃用。'));
         console.log(
-            'Please use "install" instead - it will detect and offer to update existing installations.'
+            '请使用 "install" 代替 - 它会检测并提供更新现有安装的选项。'
         );
 
         const installDir = await this.findInstallation();
@@ -1171,7 +1138,7 @@ class Installer {
             };
             return await this.install(config);
         }
-        console.log(chalk.red("No SDAT installation found."));
+        console.log(chalk.red("未找到 SDAT 安装。"));
     }
 
     async listAgents() {
@@ -1197,7 +1164,7 @@ class Installer {
         console.log(chalk.bold("\nAvailable SDAT Expansion Packs:\n"));
 
         if (expansionPacks.length === 0) {
-            console.log(chalk.yellow("No expansion packs found."));
+            console.log(chalk.yellow("未找到扩展包。"));
             return;
         }
 
@@ -1235,7 +1202,7 @@ class Installer {
         const manifest = await fileManager.readManifest(installDir);
 
         if (!manifest) {
-            console.log(chalk.red("Invalid installation - manifest not found"));
+            console.log(chalk.red("无效安装 - 未找到清单"));
             return;
         }
 
@@ -1306,9 +1273,7 @@ class Installer {
                 const pack = expansionPacks.find((p) => p.id === packId);
 
                 if (!pack) {
-                    console.warn(
-                        `Expansion pack ${packId} not found, skipping...`
-                    );
+                    console.warn(`未找到扩展包 ${packId}，跳过...`);
                     continue;
                 }
 
@@ -1328,14 +1293,12 @@ class Installer {
                         );
 
                     console.log(
-                        chalk.yellow(
-                            `\n🔍 Found existing ${pack.name} installation`
-                        )
+                        chalk.yellow(`\n🔍 发现现有 ${pack.name} 安装`)
                     );
                     console.log(
-                        `   Current version: ${existingManifest.version || "unknown"}`
+                        `   当前版本: ${existingManifest.version || "unknown"}`
                     );
-                    console.log(`   New version: ${pack.version}`);
+                    console.log(`   新版本: ${pack.version}`);
 
                     // Check integrity of existing expansion pack
                     const packIntegrity = await fileManager.checkFileIntegrity(
@@ -1347,20 +1310,18 @@ class Installer {
                         packIntegrity.modified.length > 0;
 
                     if (hasPackIntegrityIssues) {
-                        console.log(
-                            chalk.red("   ⚠️  Installation issues detected:")
-                        );
+                        console.log(chalk.red("   ⚠️  检测到安装问题:"));
                         if (packIntegrity.missing.length > 0) {
                             console.log(
                                 chalk.red(
-                                    `     Missing files: ${packIntegrity.missing.length}`
+                                    `     缺失文件: ${packIntegrity.missing.length}`
                                 )
                             );
                         }
                         if (packIntegrity.modified.length > 0) {
                             console.log(
                                 chalk.yellow(
-                                    `     Modified files: ${packIntegrity.modified.length}`
+                                    `     已修改文件: ${packIntegrity.modified.length}`
                                 )
                             );
                         }
@@ -1372,26 +1333,22 @@ class Installer {
                     );
 
                     if (versionCompare === 0) {
-                        console.log(
-                            chalk.yellow(
-                                "   ⚠️  Same version already installed"
-                            )
-                        );
+                        console.log(chalk.yellow("   ⚠️  已安装相同版本"));
 
                         const choices = [];
                         if (hasPackIntegrityIssues) {
                             choices.push({
-                                name: "Repair (restore missing/modified files)",
+                                name: "修复 (恢复缺失/已修改的文件)",
                                 value: "repair",
                             });
                         }
                         choices.push(
                             {
-                                name: "Force reinstall (overwrite)",
+                                name: "强制重新安装 (覆盖)",
                                 value: "overwrite",
                             },
-                            { name: "Skip this expansion pack", value: "skip" },
-                            { name: "Cancel installation", value: "cancel" }
+                            { name: "跳过此扩展包", value: "skip" },
+                            { name: "取消安装", value: "cancel" }
                         );
 
                         const { action } = await inquirer.prompt([
@@ -1421,7 +1378,7 @@ class Installer {
                             continue;
                         }
                     } else if (versionCompare < 0) {
-                        console.log(chalk.cyan("   ⬆️  Upgrade available"));
+                        console.log(chalk.cyan("   ⬆️  有可用更新"));
 
                         const { proceed } = await inquirer.prompt([
                             {
@@ -2129,7 +2086,7 @@ class Installer {
                         expansionSource,
                         expansionTarget
                     );
-                    console.log(chalk.green(`✓ Copied expansion pack bundles`));
+                    console.log(chalk.green(`✓ 已复制扩展包包`));
                 }
 
                 console.log(
@@ -2139,7 +2096,7 @@ class Installer {
                 );
             }
         } catch (error) {
-            console.error(`Failed to install web bundles: ${error.message}`);
+            console.error(`安装 Web 包失败: ${error.message}`);
         }
     }
 
@@ -2154,7 +2111,7 @@ class Installer {
 
         // Check if common/ exists
         if (!(await fileManager.pathExists(commonPath))) {
-            console.warn("Warning: common/ folder not found");
+            console.warn("警告: 未找到 common/ 文件夹");
             return copiedFiles;
         }
 
@@ -2313,7 +2270,7 @@ class Installer {
             spinner.succeed(`${pack.name} repaired successfully!`);
 
             // Show summary
-            console.log(chalk.green(`\n✓ ${pack.name} repaired!`));
+            console.log(chalk.green(`\n✓ ${pack.name} 已修复！`));
             if (integrity.missing.length > 0) {
                 console.log(
                     chalk.green(
@@ -2330,7 +2287,7 @@ class Installer {
             }
         } catch (error) {
             if (spinner) spinner.fail(`Failed to repair ${pack.name}`);
-            console.error(`Error: ${error.message}`);
+            console.error(`错误: ${error.message}`);
         }
     }
 

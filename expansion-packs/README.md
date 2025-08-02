@@ -1,3 +1,3 @@
 # SDAT Method Expansion Packs
 
-Expansion packs extend SDAT-Method beyond traditional software development, providing specialized agent teams, templates, and workflows for specific domains and industries. Each pack is a self-contained ecosystem designed to bring the power of AI-assisted workflows to any field. Coming soon.
+扩展包将 SDAT-Method 拓展到传统软件开发之外，为特定领域和行业提供专用的智能代理团队、模板和工作流。每个扩展包都是一个自包含的生态系统，旨在将 AI 辅助工作流的能力带入各行各业。敬请期待。

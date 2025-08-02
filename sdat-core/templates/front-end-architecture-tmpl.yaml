@@ -1,206 +1,273 @@
 template:
-  id: frontend-architecture-template-v2
-  name: Frontend Architecture Document
-  version: 2.0
-  output:
-    format: markdown
-    filename: docs/ui-architecture.md
-    title: "{{project_name}} Frontend Architecture Document"
+    id: frontend-architecture-template-v2
+    name: 前端架构文档
+    version: 2.0
+    output:
+        format: markdown
+        filename: docs/ui-architecture.md
+        title: "{{project_name}} 前端架构文档"
 
 workflow:
-  mode: interactive
-  elicitation: advanced-elicitation
+    mode: interactive
+    elicitation: advanced-elicitation
 
 sections:
-  - id: template-framework-selection
-    title: Template and Framework Selection
-    instruction: |
-      Review provided documents including PRD, UX-UI Specification, and main Architecture Document. Focus on extracting technical implementation details needed for AI frontend tools and developer agents. Ask the user for any of these documents if you are unable to locate and were not provided.
-      
-      Before proceeding with frontend architecture design, check if the project is using a frontend starter template or existing codebase:
-      
-      1. Review the PRD, main architecture document, and brainstorming brief for mentions of:
-         - Frontend starter templates (e.g., Create React App, Next.js, Vite, Vue CLI, Angular CLI, etc.)
-         - UI kit or component library starters
-         - Existing frontend projects being used as a foundation
-         - Admin dashboard templates or other specialized starters
-         - Design system implementations
-      
-      2. If a frontend starter template or existing project is mentioned:
-         - Ask the user to provide access via one of these methods:
-           - Link to the starter template documentation
-           - Upload/attach the project files (for small projects)
-           - Share a link to the project repository
-         - Analyze the starter/existing project to understand:
-           - Pre-installed dependencies and versions
-           - Folder structure and file organization
-           - Built-in components and utilities
-           - Styling approach (CSS modules, styled-components, Tailwind, etc.)
-           - State management setup (if any)
-           - Routing configuration
-           - Testing setup and patterns
-           - Build and development scripts
-         - Use this analysis to ensure your frontend architecture aligns with the starter's patterns
-      
-      3. If no frontend starter is mentioned but this is a new UI, ensure we know what the ui language and framework is:
-         - Based on the framework choice, suggest appropriate starters:
-           - React: Create React App, Next.js, Vite + React
-           - Vue: Vue CLI, Nuxt.js, Vite + Vue
-           - Angular: Angular CLI
-           - Or suggest popular UI templates if applicable
-         - Explain benefits specific to frontend development
-      
-      4. If the user confirms no starter template will be used:
-         - Note that all tooling, bundling, and configuration will need manual setup
-         - Proceed with frontend architecture from scratch
-      
-      Document the starter template decision and any constraints it imposes before proceeding.
-    sections:
-      - id: changelog
-        title: Change Log
-        type: table
-        columns: [Date, Version, Description, Author]
-        instruction: Track document versions and changes
+    - id: template-framework-selection
+      title: 模板和框架选择
+      instruction: |
+          审查提供的文档，包括 PRD、UX-UI 规范和主架构文档。专注于提取 AI 前端工具和开发人员代理所需的技术实现细节。如果无法找到，请向用户索取这些文档。
 
-  - id: frontend-tech-stack
-    title: Frontend Tech Stack
-    instruction: Extract from main architecture's Technology Stack Table. This section MUST remain synchronized with the main architecture document.
-    elicit: true
-    sections:
-      - id: tech-stack-table
-        title: Technology Stack Table
-        type: table
-        columns: [Category, Technology, Version, Purpose, Rationale]
-        instruction: Fill in appropriate technology choices based on the selected framework and project requirements.
-        rows:
-          - ["Framework", "{{framework}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["UI Library", "{{ui_library}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["State Management", "{{state_management}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Routing", "{{routing_library}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Build Tool", "{{build_tool}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Styling", "{{styling_solution}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Testing", "{{test_framework}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Component Library", "{{component_lib}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Form Handling", "{{form_library}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Animation", "{{animation_lib}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
-          - ["Dev Tools", "{{dev_tools}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          在继续前端架构设计之前，检查项目是否使用前端启动模板或现有代码库:
 
-  - id: project-structure
-    title: Project Structure
-    instruction: Define exact directory structure for AI tools based on the chosen framework. Be specific about where each type of file goes. Generate a structure that follows the framework's best practices and conventions.
-    elicit: true
-    type: code
-    language: plaintext
+          1. 审查 PRD、主架构文档和头脑风暴简报中的提及:
+             - 前端启动模板 (例如，Create React App、Next.js、Vite、Vue CLI、Angular CLI 等)
+             - UI 工具包或组件库启动器
+             - 作为基础的现有前端项目
+             - 管理仪表板模板或其他专用启动器
+             - 设计系统实现
 
-  - id: component-standards
-    title: Component Standards
-    instruction: Define exact patterns for component creation based on the chosen framework.
-    elicit: true
-    sections:
-      - id: component-template
-        title: Component Template
-        instruction: Generate a minimal but complete component template following the framework's best practices. Include TypeScript types, proper imports, and basic structure.
-        type: code
-        language: typescript
-      - id: naming-conventions
-        title: Naming Conventions
-        instruction: Provide naming conventions specific to the chosen framework for components, files, services, state management, and other architectural elements.
+          2. 如果提到前端启动模板或现有项目:
+             - 请用户通过以下方法提供访问权限:
+               - 通过以下方式提供访问权限:
+                 - 链接至启动模板文档
+                 - 上传/附加项目文件 (对于小型项目)
+                 - 分享项目仓库链接
+             - 分析启动器/现有项目以理解:
+               - 预安装的依赖项和版本
+               - 文件夹结构和文件组织
+               - 内置组件和实用程序
+               - 样式方法 (CSS 模块、styled-components、Tailwind 等)
+               - 状态管理设置 (如果有)
+               - 路由配置
+               - Testing setup and patterns
+               - 构建和开发脚本
+             - 使用此分析确保您的架构与启动器的模式一致
 
-  - id: state-management
-    title: State Management
-    instruction: Define state management patterns based on the chosen framework.
-    elicit: true
-    sections:
-      - id: store-structure
-        title: Store Structure
-        instruction: Generate the state management directory structure appropriate for the chosen framework and selected state management solution.
-        type: code
-        language: plaintext
-      - id: state-template
-        title: State Management Template
-        instruction: Provide a basic state management template/example following the framework's recommended patterns. Include TypeScript types and common operations like setting, updating, and clearing state.
-        type: code
-        language: typescript
+          3. 如果未提及前端启动器但这是一个新 UI，请确保我们知道 UI 语言和框架:
+             - 基于框架选择，建议适当的启动器:
+               - React: Create React App, Next.js, Vite + React
+               - Vue: Vue CLI, Nuxt.js, Vite + Vue
+               - Angular: Angular CLI, Angular CLI
+               - 或者建议流行的 UI 模板 (如果适用)
+             - 解释特定于前端开发的好处
 
-  - id: api-integration
-    title: API Integration
-    instruction: Define API service patterns based on the chosen framework.
-    elicit: true
-    sections:
-      - id: service-template
-        title: Service Template
-        instruction: Provide an API service template that follows the framework's conventions. Include proper TypeScript types, error handling, and async patterns.
-        type: code
-        language: typescript
-      - id: api-client-config
-        title: API Client Configuration
-        instruction: Show how to configure the HTTP client for the chosen framework, including authentication interceptors/middleware and error handling.
-        type: code
-        language: typescript
+          4. 如果用户确认不使用启动模板:
+             - 注意所有工具、捆绑和配置都需要手动设置
+             - 从头开始进行前端架构
 
-  - id: routing
-    title: Routing
-    instruction: Define routing structure and patterns based on the chosen framework.
-    elicit: true
-    sections:
-      - id: route-configuration
-        title: Route Configuration
-        instruction: Provide routing configuration appropriate for the chosen framework. Include protected route patterns, lazy loading where applicable, and authentication guards/middleware.
-        type: code
-        language: typescript
+          记录启动模板决策和任何它施加的约束。
+      sections:
+          - id: changelog
+            title: 变更日志
+            type: table
+            columns: [Date, Version, Description, Author]
+            instruction: 跟踪文档版本和变更
 
-  - id: styling-guidelines
-    title: Styling Guidelines
-    instruction: Define styling approach based on the chosen framework.
-    elicit: true
-    sections:
-      - id: styling-approach
-        title: Styling Approach
-        instruction: Describe the styling methodology appropriate for the chosen framework (CSS Modules, Styled Components, Tailwind, etc.) and provide basic patterns.
-      - id: global-theme
-        title: Global Theme Variables
-        instruction: Provide a CSS custom properties (CSS variables) theme system that works across all frameworks. Include colors, spacing, typography, shadows, and dark mode support.
-        type: code
-        language: css
+    - id: frontend-tech-stack
+      title: 前端技术栈
+      instruction: 从主架构的技术栈表中提取。此部分必须与主架构文档同步。
+      elicit: true
+      sections:
+          - id: tech-stack-table
+            title: 技术栈表
+            type: table
+            columns: [Category, Technology, Version, Purpose, Rationale]
+            instruction: 根据所选框架和项目要求填写适当的科技选择。
+            rows:
+                - [
+                      "框架",
+                      "{{framework}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "UI 库",
+                      "{{ui_library}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "状态管理",
+                      "{{state_management}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "路由",
+                      "{{routing_library}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "构建工具",
+                      "{{build_tool}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "样式",
+                      "{{styling_solution}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "测试",
+                      "{{test_framework}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "组件库",
+                      "{{component_lib}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "表单处理",
+                      "{{form_library}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "动画",
+                      "{{animation_lib}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
+                - [
+                      "开发工具",
+                      "{{dev_tools}}",
+                      "{{version}}",
+                      "{{purpose}}",
+                      "{{why_chosen}}",
+                  ]
 
-  - id: testing-requirements
-    title: Testing Requirements
-    instruction: Define minimal testing requirements based on the chosen framework.
-    elicit: true
-    sections:
-      - id: component-test-template
-        title: Component Test Template
-        instruction: Provide a basic component test template using the framework's recommended testing library. Include examples of rendering tests, user interaction tests, and mocking.
-        type: code
-        language: typescript
-      - id: testing-best-practices
-        title: Testing Best Practices
-        type: numbered-list
-        items:
-          - "**Unit Tests**: Test individual components in isolation"
-          - "**Integration Tests**: Test component interactions"
-          - "**E2E Tests**: Test critical user flows (using Cypress/Playwright)"
-          - "**Coverage Goals**: Aim for 80% code coverage"
-          - "**Test Structure**: Arrange-Act-Assert pattern"
-          - "**Mock External Dependencies**: API calls, routing, state management"
+    - id: project-structure
+      title: 项目结构
+      instruction: 根据所选框架定义精确的目录结构。具体说明每种文件的放置位置。生成遵循框架最佳实践和约定的结构。
+      elicit: true
+      type: code
+      language: plaintext
 
-  - id: environment-configuration
-    title: Environment Configuration
-    instruction: List required environment variables based on the chosen framework. Show the appropriate format and naming conventions for the framework.
-    elicit: true
+    - id: component-standards
+      title: 组件标准
+      instruction: 根据所选框架定义精确的组件创建模式。
+      elicit: true
+      sections:
+          - id: component-template
+            title: 组件模板
+            instruction: 生成遵循框架最佳实践的最小但完整的组件模板。包括 TypeScript 类型、适当的导入和基本结构。
+            type: code
+            language: typescript
+          - id: naming-conventions
+            title: 命名约定
+            instruction: 为组件、文件、服务、状态管理和其他架构元素提供特定于所选框架的命名约定。
 
-  - id: frontend-developer-standards
-    title: Frontend Developer Standards
-    sections:
-      - id: critical-coding-rules
-        title: Critical Coding Rules
-        instruction: List essential rules that prevent common AI mistakes, including both universal rules and framework-specific ones.
-        elicit: true
-      - id: quick-reference
-        title: Quick Reference
-        instruction: |
-          Create a framework-specific cheat sheet with:
-          - Common commands (dev server, build, test)
-          - Key import patterns
-          - File naming conventions
-          - Project-specific patterns and utilities
+    - id: state-management
+      title: 状态管理
+      instruction: 根据所选框架定义状态管理模式。
+      elicit: true
+      sections:
+          - id: store-structure
+            title: 存储结构
+            instruction: 生成适用于所选框架和所选状态管理解决方案的状态管理目录结构。
+            type: code
+            language: plaintext
+          - id: state-template
+            title: 状态管理模板
+            instruction: 提供遵循框架推荐模式的基本状态管理模板/示例。包括 TypeScript 类型和设置、更新和清除状态等常见操作。
+            type: code
+            language: typescript
+
+    - id: api-integration
+      title: API 集成
+      instruction: 根据所选框架定义 API 服务模式。
+      elicit: true
+      sections:
+          - id: service-template
+            title: 服务模板
+            instruction: 提供遵循框架约定的 API 服务模板。包括适当的 TypeScript 类型、错误处理和异步模式。
+            type: code
+            language: typescript
+          - id: api-client-config
+            title: API 客户端配置
+            instruction: 显示如何为所选框架配置 HTTP 客户端，包括身份验证拦截器/中间件和错误处理。
+            type: code
+            language: typescript
+
+    - id: routing
+      title: 路由
+      instruction: 根据所选框架定义路由结构和模式。
+      elicit: true
+      sections:
+          - id: route-configuration
+            title: 路由配置
+            instruction: 提供适用于所选框架的路由配置。包括受保护的路由模式、懒加载 (如果适用) 和身份验证守卫/中间件。
+            type: code
+            language: typescript
+
+    - id: styling-guidelines
+      title: 样式指南
+      instruction: 根据所选框架定义样式方法。
+      elicit: true
+      sections:
+          - id: styling-approach
+            title: 样式方法
+            instruction: 描述适用于所选框架的样式方法 (CSS 模块、Styled Components、Tailwind 等) 并提供基本模式。
+          - id: global-theme
+            title: 全局主题变量
+            instruction: 提供适用于所有框架的 CSS 自定义属性 (CSS 变量) 主题系统。包括颜色、间距、排版、阴影和暗模式支持。
+            type: code
+            language: css
+
+    - id: testing-requirements
+      title: 测试要求
+      instruction: 根据所选框架定义最小测试要求。
+      elicit: true
+      sections:
+          - id: component-test-template
+            title: 组件测试模板
+            instruction: 使用框架推荐的测试库提供一个基本的组件测试模板。包括渲染测试、用户交互测试和模拟的示例。
+            type: code
+            language: typescript
+          - id: testing-best-practices
+            title: 测试最佳实践
+            type: numbered-list
+            items:
+                - "**单元测试**: 测试单个组件"
+                - "**集成测试**: 测试组件交互"
+                - "**E2E 测试**: 测试关键用户流程 (使用 Cypress/Playwright)"
+                - "**覆盖率目标**: 目标 80% 代码覆盖率"
+                - "**测试结构**: Arrange-Act-Assert 模式"
+                - "**Mock External Dependencies**: API 调用、路由、状态管理"
+
+    - id: environment-configuration
+      title: 环境配置
+      instruction: 根据所选框架列出所需的环境变量。显示适用于框架的适当格式和命名约定。
+      elicit: true
+
+    - id: frontend-developer-standards
+      title: 前端开发标准
+      sections:
+          - id: critical-coding-rules
+            title: 关键编码规则
+            instruction: 列出防止常见 AI 错误的必要规则，包括通用规则和特定于框架的规则。
+            elicit: true
+          - id: quick-reference
+            title: 快速参考
+            instruction: |
+                创建特定于框架的备忘单:
+                - 常见命令 (开发服务器、构建、测试)
+                - 关键导入模式
+                - 文件命名约定
+                - 项目特定模式和实用程序

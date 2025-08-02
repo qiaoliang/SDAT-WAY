@@ -1,137 +1,137 @@
 template:
-  id: story-template-v2
-  name: Story Document
-  version: 2.0
-  output:
-    format: markdown
-    filename: docs/stories/{{epic_num}}.{{story_num}}.{{story_title_short}}.md
-    title: "Story {{epic_num}}.{{story_num}}: {{story_title_short}}"
+    id: story-template-v2
+    name: 故事文档
+    version: 2.0
+    output:
+        format: markdown
+        filename: docs/stories/{{epic_num}}.{{story_num}}.{{story_title_short}}.md
+        title: "story {{epic_num}}.{{story_num}}: {{story_title_short}}"
 
 workflow:
-  mode: interactive
-  elicitation: advanced-elicitation
+    mode: interactive
+    elicitation: advanced-elicitation
 
 agent_config:
-  editable_sections: 
-    - Status
-    - Story
-    - Acceptance Criteria
-    - Tasks / Subtasks
-    - Dev Notes
-    - Testing
-    - Change Log
+    editable_sections:
+        - 状态
+        - 故事
+        - 接受标准
+        - 任务 / 子任务
+        - 开发备注事项
+        - 测试
+        - 变更日志
 
 sections:
-  - id: status
-    title: Status
-    type: choice
-    choices: [Draft, Approved, InProgress, Review, Done]
-    instruction: Select the current status of the story
-    owner: scrum-master
-    editors: [scrum-master, dev-agent]
-    
-  - id: story
-    title: Story
-    type: template-text
-    template: |
-      **As a** {{role}},
-      **I want** {{action}},
-      **so that** {{benefit}}
-    instruction: Define the user story using the standard format with role, action, and benefit
-    elicit: true
-    owner: scrum-master
-    editors: [scrum-master]
-    
-  - id: acceptance-criteria
-    title: Acceptance Criteria
-    type: numbered-list
-    instruction: Copy the acceptance criteria numbered list from the epic file
-    elicit: true
-    owner: scrum-master
-    editors: [scrum-master]
-    
-  - id: tasks-subtasks
-    title: Tasks / Subtasks
-    type: bullet-list
-    instruction: |
-      Break down the story into specific tasks and subtasks needed for implementation.
-      Reference applicable acceptance criteria numbers where relevant.
-    template: |
-      - [ ] Task 1 (AC: # if applicable)
-        - [ ] Subtask1.1...
-      - [ ] Task 2 (AC: # if applicable)
-        - [ ] Subtask 2.1...
-      - [ ] Task 3 (AC: # if applicable)
-        - [ ] Subtask 3.1...
-    elicit: true
-    owner: scrum-master
-    editors: [scrum-master, dev-agent]
-    
-  - id: dev-notes
-    title: Dev Notes
-    instruction: |
-      Populate relevant information, only what was pulled from actual artifacts from docs folder, relevant to this story:
-      - Do not invent information
-      - If known add Relevant Source Tree info that relates to this story
-      - If there were important notes from previous story that are relevant to this one, include them here
-      - Put enough information in this section so that the dev agent should NEVER need to read the architecture documents, these notes along with the tasks and subtasks must give the Dev Agent the complete context it needs to comprehend with the least amount of overhead the information to complete the story, meeting all AC and completing all tasks+subtasks
-    elicit: true
-    owner: scrum-master
-    editors: [scrum-master]
-    sections:
-      - id: testing-standards
-        title: Testing
-        instruction: |
-          List Relevant Testing Standards from Architecture the Developer needs to conform to:
-          - Test file location
-          - Test standards
-          - Testing frameworks and patterns to use
-          - Any specific testing requirements for this story
-        elicit: true
-        owner: scrum-master
-        editors: [scrum-master]
-        
-  - id: change-log
-    title: Change Log
-    type: table
-    columns: [Date, Version, Description, Author]
-    instruction: Track changes made to this story document
-    owner: scrum-master
-    editors: [scrum-master, dev-agent, qa-agent]
-    
-  - id: dev-agent-record
-    title: Dev Agent Record
-    instruction: This section is populated by the development agent during implementation
-    owner: dev-agent
-    editors: [dev-agent]
-    sections:
-      - id: agent-model
-        title: Agent Model Used
-        template: "{{agent_model_name_version}}"
-        instruction: Record the specific AI agent model and version used for development
-        owner: dev-agent
-        editors: [dev-agent]
-        
-      - id: debug-log-references
-        title: Debug Log References
-        instruction: Reference any debug logs or traces generated during development
-        owner: dev-agent
-        editors: [dev-agent]
-        
-      - id: completion-notes
-        title: Completion Notes List
-        instruction: Notes about the completion of tasks and any issues encountered
-        owner: dev-agent
-        editors: [dev-agent]
-        
-      - id: file-list
-        title: File List
-        instruction: List all files created, modified, or affected during story implementation
-        owner: dev-agent
-        editors: [dev-agent]
-        
-  - id: qa-results
-    title: QA Results
-    instruction: Results from QA Agent QA review of the completed story implementation
-    owner: qa-agent
-    editors: [qa-agent]
+    - id: status
+      title: 状态
+      type: choice
+      choices: [Draft, Approved, InProgress, Review, Done]
+      instruction: 选择故事的当前状态
+      owner: scrum-master
+      editors: [scrum-master, dev-agent]
+
+    - id: story
+      title: 故事
+      type: template-text
+      template: |
+          **作为** {{role}},
+          **我想要** {{action}},
+          **以便** {{benefit}}
+      instruction: 使用标准格式定义用户故事，包括角色、行动和好处
+      elicit: true
+      owner: scrum-master
+      editors: [scrum-master]
+
+    - id: acceptance-criteria
+      title: 验收标准
+      type: numbered-list
+      instruction: 从史诗文件中复制接受标准的编号列表
+      elicit: true
+      owner: scrum-master
+      editors: [scrum-master]
+
+    - id: tasks-subtasks
+      title: 任务 / 子任务
+      type: bullet-list
+      instruction: |
+          将故事分解为实现所需的具体任务和子任务。
+          参考相关的验收标准编号。
+      template: |
+          - [ ] Task 1 (AC: # if applicable)
+            - [ ] Subtask1.1...
+          - [ ] Task 2 (AC: # if applicable)
+            - [ ] Subtask 2.1...
+          - [ ] Task 3 (AC: # if applicable)
+            - [ ] Subtask 3.1...
+      elicit: true
+      owner: scrum-master
+      editors: [scrum-master, dev-agent]
+
+    - id: dev-notes
+      title: 开发笔记
+      instruction: |
+          填充相关信息，仅从文档文件夹中提取与故事相关的实际工件：
+          - 不要编造信息
+          - 如果已知，添加与故事相关的相关源树信息
+          - 如果前一个故事有重要笔记与这个故事相关，请在这里包含它们
+          - 在这个部分中放入足够的信息，以便开发代理永远不需要阅读架构文档，这些笔记以及任务和子任务必须给开发代理提供完成故事所需的最少信息，满足所有验收标准并完成所有任务+子任务
+      elicit: true
+      owner: scrum-master
+      editors: [scrum-master]
+      sections:
+          - id: testing-standards
+            title: 测试
+            instruction: |
+                列出架构师需要遵循的相关测试标准：
+                - 测试文件位置
+                - 测试标准
+                - 使用的测试框架和模式
+                - 此故事的任何特定测试要求
+            elicit: true
+            owner: scrum-master
+            editors: [scrum-master]
+
+    - id: change-log
+      title: 变更日志
+      type: table
+      columns: [Date, Version, Description, Author]
+      instruction: 跟踪对故事文档所做的更改
+      owner: scrum-master
+      editors: [scrum-master, dev-agent, qa-agent]
+
+    - id: dev-agent-record
+      title: 开发代理记录
+      instruction: 此部分由开发代理在实现期间填充
+      owner: dev-agent
+      editors: [dev-agent]
+      sections:
+          - id: agent-model
+            title: 使用的代理模型
+            template: "{{agent_model_name_version}}"
+            instruction: 记录用于开发的特定 AI 代理模型和版本
+            owner: dev-agent
+            editors: [dev-agent]
+
+          - id: debug-log-references
+            title: 调试日志参考
+            instruction: 参考开发期间生成的任何调试日志或跟踪
+            owner: dev-agent
+            editors: [dev-agent]
+
+          - id: completion-notes
+            title: 完成笔记列表
+            instruction: 关于任务完成和遇到的任何问题的笔记
+            owner: dev-agent
+            editors: [dev-agent]
+
+          - id: file-list
+            title: 文件列表
+            instruction: 列出在故事实现期间创建、修改或受影响的文件
+            owner: dev-agent
+            editors: [dev-agent]
+
+    - id: qa-results
+      title: QA 结果
+      instruction: QA 代理对完成的故事实现的 QA 审查结果
+      owner: qa-agent
+      editors: [qa-agent]

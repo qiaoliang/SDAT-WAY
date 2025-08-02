@@ -1,9 +1,9 @@
 workflow:
     id: greenfield-service
-    name: Greenfield Service/API Development
+    name: 全新项目的 Service/API 开发
     description: >-
-        Agent workflow for building backend services from concept to development.
-        Supports both comprehensive planning for complex services and rapid prototyping for simple APIs.
+        从概念到开发构建后端服务的 Agent workflow。
+        支持复杂服务的全面规划和简单 API 的快速原型设计。
     type: greenfield
     project_types:
         - rest-api
@@ -19,45 +19,45 @@ workflow:
           optional_steps:
               - brainstorming_session
               - market_research_prompt
-          notes: "Can do brainstorming first, then optional deep research before creating project brief. SAVE OUTPUT: Copy final project-brief.md to your project's docs/ folder."
+          notes: "可以先进行头脑风暴，然后在创建项目简介之前进行可选的深入研究。保存输出：将最终的 project-brief.md 复制到您项目的 docs/ 文件夹中。"
 
         - agent: pm
           creates: prd.md
           requires: project-brief.md
-          notes: "Creates PRD from project brief using prd-tmpl, focused on API/service requirements. SAVE OUTPUT: Copy final prd.md to your project's docs/ folder."
+          notes: "使用 prd-tmpl 从项目简介创建 PRD，专注于 API/服务需求。保存输出：将最终的 prd.md 复制到您项目的 docs/ 文件夹中。"
 
         - agent: architect
           creates: architecture.md
           requires: prd.md
           optional_steps:
               - technical_research_prompt
-          notes: "Creates backend/service architecture using architecture-tmpl. May suggest changes to PRD stories or new stories. SAVE OUTPUT: Copy final architecture.md to your project's docs/ folder."
+          notes: "使用 architecture-tmpl 创建后端/服务架构。可能会建议对 PRD stories 进行更改或添加新的 stories。保存输出：将最终的 architecture.md 复制到您项目的 docs/ 文件夹中。"
 
         - agent: pm
           updates: prd.md (if needed)
           requires: architecture.md
           condition: architecture_suggests_prd_changes
-          notes: "If architect suggests story changes, update PRD and re-export the complete unredacted prd.md to docs/ folder."
+          notes: "如果 architect 建议 story 更改，请更新 PRD 并将完整的未编辑 prd.md 重新导出到 docs/ 文件夹。"
 
         - agent: po
           validates: all_artifacts
           uses: po-master-checklist
-          notes: "Validates all documents for consistency and completeness. May require updates to any document."
+          notes: "验证所有文档的一致性和完整性。可能需要更新任何文档。"
 
         - agent: various
           updates: any_flagged_documents
           condition: po_checklist_issues
-          notes: "If PO finds issues, return to relevant agent to fix and re-export updated documents to docs/ folder."
+          notes: "如果 PO 发现问题，请返回相关 agent 进行修复并将更新的文档重新导出到 docs/ 文件夹。"
 
         - agent: po
           action: shard_documents
           creates: sharded_docs
           requires: all_artifacts_in_project
           notes: |
-              Shard documents for IDE development:
-              - Option A: Use PO agent to shard: @po then ask to shard docs/prd.md
-              - Option B: Manual: Drag shard-doc task + docs/prd.md into chat
-              - Creates docs/prd/ and docs/architecture/ folders with sharded content
+              为 IDE 开发分片文档：
+              - 选项 A：使用 PO agent 进行分片：@po 然后要求分片 docs/prd.md
+              - 选项 B：手动：将 shard-doc task + docs/prd.md 拖入聊天
+              - 创建 docs/prd/ 和 docs/architecture/ 文件夹，包含分片内容
 
         - agent: sm
           action: create_story
@@ -65,10 +65,10 @@ workflow:
           requires: sharded_docs
           repeats: for_each_epic
           notes: |
-              Story creation cycle:
-              - SM Agent (New Chat): @sm → *create
-              - Creates next story from sharded docs
-              - Story starts in "Draft" status
+              Story 创建周期：
+              - SM Agent（新聊天）：@sm → *create
+              - 从分片文档创建下一个 story
+              - Story 以"草稿"状态开始
 
         - agent: analyst/pm
           action: review_draft_story
@@ -77,20 +77,20 @@ workflow:
           optional: true
           condition: user_wants_story_review
           notes: |
-              OPTIONAL: Review and approve draft story
-              - NOTE: story-review task coming soon
-              - Review story completeness and alignment
-              - Update story status: Draft → Approved
+              可选：审查并批准草稿 story
+              - 注意：story-review task 即将推出
+              - 审查 story 完整性和一致性
+              - 更新 story 状态：草稿 → 已批准
 
         - agent: dev
           action: implement_story
           creates: implementation_files
           requires: story.md
           notes: |
-              Dev Agent (New Chat): @dev
-              - Implements approved story
-              - Updates File List with all changes
-              - Marks story as "Review" when complete
+              Dev Agent（新聊天）：@dev
+              - 实现已批准的 story
+              - 使用所有更改更新文件列表
+              - 完成时将 story 标记为"审查"
 
         - agent: qa
           action: review_implementation
@@ -98,26 +98,26 @@ workflow:
           requires: implementation_files
           optional: true
           notes: |
-              OPTIONAL: QA Agent (New Chat): @qa → review-story
-              - Senior dev review with refactoring ability
-              - Fixes small issues directly
-              - Leaves checklist for remaining items
-              - Updates story status (Review → Done or stays Review)
+              可选：QA Agent（新聊天）：@qa → review-story
+              - 具有重构能力的高级开发审查
+              - 直接修复小问题
+              - 为剩余项目留下检查清单
+              - 更新 story 状态（审查 → 完成或保持审查）
 
         - agent: dev
           action: address_qa_feedback
           updates: implementation_files
           condition: qa_left_unchecked_items
           notes: |
-              If QA left unchecked items:
-              - Dev Agent (New Chat): Address remaining items
-              - Return to QA for final approval
+              如果 QA 留下未检查的项目：
+              - Dev Agent（新聊天）：处理剩余项目
+              - 返回 QA 进行最终批准
 
         - repeat_development_cycle:
           action: continue_for_all_stories
           notes: |
-              Repeat story cycle (SM → Dev → QA) for all epic stories
-              Continue until all stories in PRD are complete
+              对所有 epic stories 重复 story 周期（SM → Dev → QA）
+              继续直到 PRD 中的所有 stories 完成
 
         - agent: po
           action: epic_retrospective
@@ -125,18 +125,18 @@ workflow:
           condition: epic_complete
           optional: true
           notes: |
-              OPTIONAL: After epic completion
-              - NOTE: epic-retrospective task coming soon
-              - Validate epic was completed correctly
-              - Document learnings and improvements
+              可选：epic 完成后
+              - 注意：epic-retrospective task 即将推出
+              - 验证 epic 是否正确完成
+              - 记录学习和改进
 
         - workflow_end:
           action: project_complete
           notes: |
-              All stories implemented and reviewed!
-              Service development phase complete.
+              所有 stories 已实现并审查！
+              服务开发阶段完成。
 
-              Reference: {root}/data/sdat-kb.md#IDE Development Workflow
+              参考：{root}/data/sdat-kb.md#IDE Development Workflow
 
     flow_diagram: |
         ```mermaid
@@ -189,18 +189,18 @@ workflow:
 
     decision_guidance:
         when_to_use:
-            - Building production APIs or microservices
-            - Multiple endpoints and complex business logic
-            - Need comprehensive documentation and testing
-            - Multiple team members will be involved
-            - Long-term maintenance expected
-            - Enterprise or external-facing APIs
+            - 构建生产 API 或 microservices
+            - 多个端点和复杂业务逻辑
+            - 需要全面的文档和测试
+            - 多个团队成员将参与
+            - 预期长期维护
+            - 企业或面向外部的 API
 
     handoff_prompts:
-        analyst_to_pm: "Project brief is complete. Save it as docs/project-brief.md in your project, then create the PRD."
-        pm_to_architect: "PRD is ready. Save it as docs/prd.md in your project, then create the service architecture."
-        architect_review: "Architecture complete. Save it as docs/architecture.md. Do you suggest any changes to the PRD stories or need new stories added?"
-        architect_to_pm: "Please update the PRD with the suggested story changes, then re-export the complete prd.md to docs/."
-        updated_to_po: "All documents ready in docs/ folder. Please validate all artifacts for consistency."
-        po_issues: "PO found issues with [document]. Please return to [agent] to fix and re-save the updated document."
-        complete: "All planning artifacts validated and saved in docs/ folder. Move to IDE environment to begin development."
+        analyst_to_pm: "项目简介已完成。将其保存为项目中的 docs/project-brief.md，然后创建 PRD。"
+        pm_to_architect: "PRD 已准备就绪。将其保存为项目中的 docs/prd.md，然后创建服务架构。"
+        architect_review: "架构完成。将其保存为 docs/architecture.md。您是否建议对 PRD stories 进行任何更改或需要添加新的 stories？"
+        architect_to_pm: "请使用建议的 story 更改更新 PRD，然后将完整的 prd.md 重新导出到 docs/。"
+        updated_to_po: "docs/ 文件夹中的所有文档已准备就绪。请验证所有工件的一致性。"
+        po_issues: "PO 发现 [document] 有问题。请返回 [agent] 进行修复并重新保存更新的文档。"
+        complete: "所有规划工件已在 docs/ 文件夹中验证并保存。移动到 IDE 环境开始开发。"
