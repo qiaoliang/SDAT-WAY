@@ -1,0 +1,7 @@
+bundle:
+    name: infra-devops-platform
+    icon: 🎮
+    description: infra-devops-platform, 具有 ci/cd, sre, k8s, argocd, github action.
+agents:
+    - infra-devops-platform
+    - sdat-orchestrator

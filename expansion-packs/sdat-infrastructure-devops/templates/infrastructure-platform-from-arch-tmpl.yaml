@@ -1,0 +1,630 @@
+template:
+    id: infrastructure-platform-template-v2
+    name: Platform Infrastructure Implementation
+    version: 2.0
+    output:
+        format: markdown
+        filename: docs/platform-infrastructure/platform-implementation.md
+        title: "{{project_name}} Platform Infrastructure Implementation"
+
+workflow:
+    mode: interactive
+    elicitation: advanced-elicitation
+    custom_elicitation:
+        title: "Platform Implementation Elicitation Actions"
+        sections:
+            - id: foundation-infrastructure
+              options:
+                  - "平台层安全加固 - 增加安全控制与合规性验证"
+                  - "性能优化 - 网络与资源优化"
+                  - "卓越运维提升 - 自动化与监控改进"
+                  - "平台集成验证 - 确认基础层对上层的支撑"
+                  - "开发者体验分析 - 基础层对开发者工作流的影响"
+                  - "灾难恢复测试 - 基础层韧性验证"
+                  - "SDAT 工作流集成 - 跨 Agent 支持验证"
+                  - "完成本阶段并进入容器平台"
+
+sections:
+    - id: initial-setup
+      instruction: |
+          初始设置
+
+          1. 将文档中的 {{project_name}} 替换为实际项目名称
+          2. 收集并审查所需输入材料：
+             - **基础设施架构文档**（主要输入，必需）
+             - 基础设施变更请求（如适用）
+             - 基础设施实施指南
+             - 技术栈文档
+             - 基础设施检查清单
+             - 注意：如缺少基础设施架构文档，请立即暂停并提示：“需要提供基础设施架构文档，才能继续平台实施。该文档定义了本次实施所依据的基础设施设计。”
+
+          3. 验证基础设施架构已审查并批准
+          4. <critical_rule>所有平台实现必须与批准的基础设施架构保持一致。任何偏差需要架构师批准。</critical_rule>
+
+          输出文件位置: `docs/platform-infrastructure/platform-implementation.md`
+
+    - id: executive-summary
+      title: 执行摘要
+      instruction: 提供平台基础设施实施的高级概述，参考基础设施架构文档的关键决策和要求。
+      template: |
+          - 平台实施范围和目标
+          - 正在实施的关键架构决策
+          - 预期结果和收益
+          - 时间线和里程碑
+
+    - id: joint-planning
+      title: 联合规划会议
+      instruction: 记录 DevOps/平台工程师与架构师之间的协作规划会议。这确保在实施开始前保持一致。
+      sections:
+          - id: architecture-alignment
+            title: 架构对齐审查
+            template: |
+                - 基础设施架构文档的审查
+                - 设计决策的确认
+                - 识别任何歧义或差距
+                - 实施方法的一致性
+          - id: implementation-strategy
+            title: 实施策略协作
+            template: |
+                - 平台层序列
+                - 技术栈验证
+                - 层间集成方法
+                - 测试和验证策略
+          - id: risk-constraint
+            title: 风险和约束讨论
+            template: |
+                - 技术风险和缓解策略
+                - 资源约束和解决方法
+                - 时间线考虑
+                - 合规性和安全要求
+          - id: validation-planning
+            title: 实施验证规划
+            template: |
+                - 每个平台层的成功标准
+                - 测试方法和接受标准
+                - 回滚策略
+                - 沟通计划
+          - id: documentation-planning
+            title: 文档和知识转移规划
+            template: |
+                - 文档要求
+                - 知识转移方法
+                - 培训需求识别
+                - 交接程序
+
+    - id: foundation-infrastructure
+      title: 基础架构层
+      instruction: 根据基础设施架构实现基础架构层。这构成了所有平台服务的基础。
+      elicit: true
+      custom_elicitation: foundation-infrastructure
+      sections:
+          - id: cloud-provider-setup
+            title: 云提供商设置
+            template: |
+                - 账户/订阅配置
+                - 区域选择和设置
+                - 资源组/组织结构
+                - 成本管理设置
+          - id: network-foundation
+            title: 网络基础
+            type: code
+            language: hcl
+            template: |
+                # 示例 Terraform 用于 VPC 设置
+                module "vpc" {
+                  source = "./modules/vpc"
+
+                  cidr_block = "{{vpc_cidr}}"
+                  availability_zones = {{availability_zones}}
+                  public_subnets = {{public_subnets}}
+                  private_subnets = {{private_subnets}}
+                }
+          - id: security-foundation
+            title: 安全基础
+            template: |
+                - IAM 角色和策略
+                - 安全组和 NACLs
+                - 加密密钥 (KMS/Key Vault)
+                - 合规控制
+          - id: core-services
+            title: 核心服务
+            template: |
+                - DNS 配置
+                - 证书管理
+                - 日志基础设施
+                - 监控基础
+
+    - id: container-platform
+      title: 容器平台实现
+      instruction: 在基础架构之上构建容器编排平台，遵循架构的容器策略。
+      sections:
+          - id: kubernetes-setup
+            title: Kubernetes 集群设置
+            sections:
+                - id: eks-setup
+                  condition: 使用 EKS
+                  type: code
+                  language: bash
+                  template: |
+                      # EKS 集群配置
+                      eksctl create cluster \
+                        --name {{cluster_name}} \
+                        --region {{aws_region}} \
+                        --nodegroup-name {{nodegroup_name}} \
+                        --node-type {{instance_type}} \
+                        --nodes {{node_count}}
+                - id: aks-setup
+                  condition: 使用 AKS
+                  type: code
+                  language: bash
+                  template: |
+                      # AKS 集群配置
+                      az aks create \
+                        --resource-group {{resource_group}} \
+                        --name {{cluster_name}} \
+                        --node-count {{node_count}} \
+                        --node-vm-size {{vm_size}} \
+                        --network-plugin azure
+          - id: node-configuration
+            title: 节点配置
+            template: |
+                - 节点组/池设置
+                - 自动缩放配置
+                - 节点安全加固
+                - 资源配额和限制
+          - id: cluster-services
+            title: 集群服务
+            template: |
+                - CoreDNS 配置
+                - Ingress 控制器设置
+                - 证书管理
+                - 存储类
+          - id: security-rbac
+            title: 安全 & RBAC
+            template: |
+                - RBAC 策略
+                - Pod 安全策略/标准
+                - 网络策略
+                - 密钥管理
+
+    - id: gitops-workflow
+      title: GitOps 工作流实现
+      instruction: 实现 GitOps 模式，用于声明式基础设施和应用程序管理，如架构中所定义。
+      sections:
+          - id: gitops-tooling
+            title: GitOps 工具设置
+            sections:
+                - id: argocd-setup
+                  condition: 使用 ArgoCD
+                  type: code
+                  language: yaml
+                  template: |
+                      apiVersion: argoproj.io/v1alpha1
+                      kind: Application
+                      metadata:
+                        name: argocd
+                        namespace: argocd
+                      spec:
+                        source:
+                          repoURL: {{repo_url}}
+                          targetRevision: {{target_revision}}
+                          path: {{path}}
+                - id: flux-setup
+                  condition: 使用 Flux
+                  type: code
+                  language: yaml
+                  template: |
+                      apiVersion: source.toolkit.fluxcd.io/v1beta2
+                      kind: GitRepository
+                      metadata:
+                        name: flux-system
+                        namespace: flux-system
+                      spec:
+                        interval: 1m
+                        ref:
+                          branch: {{branch}}
+                        url: {{git_url}}
+          - id: repository-structure
+            title: 仓库结构
+            type: code
+            language: text
+            template: |
+                platform-gitops/
+                   clusters/
+                      production/
+                      staging/
+                      development/
+                   infrastructure/
+                      base/
+                      overlays/
+                   applications/
+                       base/
+                       overlays/
+          - id: deployment-workflows
+            title: 部署工作流
+            template: |
+                - 应用程序部署模式
+                - 渐进式交付设置
+                - 回滚程序
+                - 多环境推广
+          - id: access-control
+            title: 访问控制
+            template: |
+                - Git 仓库权限
+                - GitOps 工具 RBAC
+                - 密钥管理集成
+                - 审计日志
+
+    - id: service-mesh
+      title: 服务网格实现
+      instruction: 部署服务网格，用于高级流量管理、安全性和可观察性，如架构中所指定。
+      sections:
+          - id: istio-mesh
+            title: Istio 服务网格
+            condition: 使用 Istio
+            sections:
+                - id: istio-install
+                  type: code
+                  language: bash
+                  template: |
+                      # Istio 安装
+                      istioctl install --set profile={{istio_profile}} \
+                        --set values.gateways.istio-ingressgateway.type={{ingress_type}}
+                - id: istio-config
+                  template: |
+                      - 控制平面配置
+                      - 数据平面注入
+                      - 网关配置
+                      - 可观察性集成
+          - id: linkerd-mesh
+            title: Linkerd 服务网格
+            condition: 使用 Linkerd
+            sections:
+                - id: linkerd-install
+                  type: code
+                  language: bash
+                  template: |
+                      # Linkerd 安装
+                      linkerd install --cluster-name={{cluster_name}} | kubectl apply -f -
+                      linkerd viz install | kubectl apply -f -
+                - id: linkerd-config
+                  template: |
+                      - 控制平面设置
+                      - 代理注入
+                      - 流量策略
+                      - 指标收集
+          - id: traffic-management
+            title: 流量管理
+            template: |
+                - 负载均衡策略
+                - 断路器
+                - 重试策略
+                - 金丝雀部署
+          - id: security-policies
+            title: 安全策略
+            template: |
+                - mTLS 配置
+                - 授权策略
+                - 速率限制
+                - 网络分段
+
+    - id: developer-experience
+      title: 开发者体验平台
+      instruction: 构建开发者自助服务平台，以实现高效开发工作流，如架构中所述。
+      sections:
+          - id: developer-portal
+            title: 开发者门户
+            template: |
+                - 服务目录设置
+                - API 文档
+                - 自助工作流
+                - 资源供应
+          - id: cicd-integration
+            title: CI/CD 集成
+            type: code
+            language: yaml
+            template: |
+                apiVersion: tekton.dev/v1beta1
+                kind: Pipeline
+                metadata:
+                  name: platform-pipeline
+                spec:
+                  tasks:
+                    - name: build
+                      taskRef:
+                        name: build-task
+                    - name: test
+                      taskRef:
+                        name: test-task
+                    - name: deploy
+                      taskRef:
+                        name: gitops-deploy
+          - id: development-tools
+            title: 开发工具
+            template: |
+                - 本地开发设置
+                - 远程开发环境
+                - 测试框架
+                - 调试工具
+          - id: self-service
+            title: 自助服务能力
+            template: |
+                - 环境供应
+                - 数据库创建
+                - 功能标志管理
+                - 配置管理
+
+    - id: platform-integration
+      title: 平台集成 & 安全加固
+      instruction: 实现全面的平台级集成和安全控制，覆盖所有层。
+      sections:
+          - id: end-to-end-security
+            title: 端到端安全
+            template: |
+                - 平台级安全策略
+                - 跨层认证
+                - 传输和静态加密
+                - 合规验证
+          - id: integrated-monitoring
+            title: 集成监控
+            template: |
+                - 指标聚合
+                - 日志收集和分析
+                - 分布式追踪
+                - 仪表板创建
+                kind: ConfigMap
+                metadata:
+                  name: prometheus-config
+                data:
+                  prometheus.yaml: |
+                    global:
+                      scrape_interval: {{scrape_interval}}
+                    scrape_configs:
+                      - job_name: 'kubernetes-pods'
+                        kubernetes_sd_configs:
+                          - role: pod
+          - id: platform-observability
+            title: 平台可观测性
+            template: |
+                - 指标聚合
+                - 日志收集与分析
+                - 分布式追踪
+                - 仪表板创建
+          - id: backup-dr
+            title: 备份 & 灾难恢复
+            template: |
+                - 平台备份策略
+                - 灾难恢复程序
+                - RTO/RPO 验证
+                - 恢复测试
+
+    - id: platform-operations
+      title: 平台运维 & 自动化
+      instruction: 建立运维程序和自动化，用于平台管理。
+      sections:
+          - id: monitoring-alerting
+            title: 监控 & 告警
+            template: |
+                - SLA/SLO 监控
+                - Alert routing
+                - 事件响应
+                - 性能基线
+          - id: automation-framework
+            title: 自动化框架
+            type: code
+            language: yaml
+            template: |
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: ClusterServiceVersion
+                metadata:
+                  name: platform-operator
+                spec:
+                  customresourcedefinitions:
+                    owned:
+                      - name: platformconfigs.platform.io
+                        version: v1alpha1
+          - id: maintenance-procedures
+            title: 维护程序
+            template: |
+                - 升级程序
+                - 补丁管理
+                - 证书轮换
+                - 容量管理
+          - id: operational-runbooks
+            title: 运维手册
+            template: |
+                - 常见运维任务
+                - 故障排除指南
+                - 紧急程序
+                - 恢复手册
+
+    - id: sdat-workflow-integration
+      title: SDAT 工作流集成
+      instruction: 验证平台是否支持所有 SDAT 代理工作流和跨职能需求。
+      sections:
+          - id: development-agent-support
+            title: 开发代理支持
+            template: |
+                - 前端开发工作流
+                - 后端开发工作流
+                - 全栈集成
+                - 本地开发体验
+          - id: iac-development
+            title: IaC 开发
+            template: |
+                - IaC 开发工作流
+                - 测试框架
+                - 部署自动化
+                - 版本控制集成
+          - id: cross-agent-collaboration
+            title: 跨代理协作
+            template: |
+                - 共享服务访问
+                - 通信模式
+                - 数据共享机制
+                - 安全边界
+          - id: cicd-integration-workflow
+            title: CI/CD 集成
+            type: code
+            language: yaml
+            template: |
+                stages:
+                  - analyze
+                  - plan
+                  - architect
+                  - develop
+                  - test
+                  - deploy
+
+    - id: platform-validation
+      title: 平台验证 & 测试
+      instruction: 执行全面的验证，以确保平台满足所有要求。
+      sections:
+          - id: functional-testing
+            title: 功能测试
+            template: |
+                - 组件测试
+                - 集成测试
+                - 端到端测试
+                - 性能测试
+          - id: security-validation
+            title: 安全验证
+            template: |
+                - 渗透测试
+                - 合规扫描
+                - 漏洞评估
+                - 访问控制验证
+          - id: dr-testing
+            title: 灾难恢复测试
+            template: |
+                - 备份恢复
+                - 故障转移程序
+                - 恢复时间验证
+                - 数据完整性检查
+          - id: load-testing
+            title: 负载测试
+            type: code
+            language: typescript
+            template: |
+                // K6 Load Test Example
+                import http from 'k6/http';
+                import { check } from 'k6';
+
+                export let options = {
+                  stages: [
+                    { duration: '5m', target: {{target_users}} },
+                    { duration: '10m', target: {{target_users}} },
+                    { duration: '5m', target: 0 },
+                  ],
+                };
+
+    - id: knowledge-transfer
+      title: 知识转移 & 文档
+      instruction: 准备全面的文档和知识转移材料。
+      sections:
+          - id: platform-documentation
+            title: 平台文档
+            template: |
+                - 架构文档
+                - 运维程序
+                - 配置参考
+                - API 文档
+          - id: training-materials
+            title: 培训材料
+            template: |
+                - 开发人员指南
+                - 运维培训
+                - 安全最佳实践
+                - 故障排除指南
+          - id: handoff-procedures
+            title: 交接程序
+            template: |
+                - 团队责任
+                - 升级程序
+                - 支持模型
+                - 知识库
+
+    - id: implementation-review
+      title: 实施审查
+      instruction: 与架构师进行后实施审查，以验证一致性并捕获学习成果。
+      sections:
+          - id: implementation-validation
+            title: 实施验证
+            template: |
+                - 架构一致性验证
+                - 偏差文档
+                - 性能验证
+                - 安全审查
+          - id: lessons-learned
+            title: 学习成果
+            template: |
+                - 哪些做得好
+                - 遇到的挑战
+                - 流程改进
+                - 技术洞察
+          - id: future-evolution
+            title: 未来演进
+            template: |
+                - 改进机会
+                - 技术债务项目
+                - 升级计划
+                - 容量计划
+          - id: sign-off
+            title: 签字 & 接受
+            template: |
+                - 架构师批准
+                - 利益相关者接受
+                - 上线授权
+                - 支持过渡
+
+    - id: platform-metrics
+      title: 平台指标 & KPIs
+      instruction: 定义和实施关键绩效指标，以衡量平台成功。
+      sections:
+          - id: technical-metrics
+            title: 技术指标
+            template: |
+                - Platform availability: {{availability_target}}
+                - Response time: {{response_time_target}}
+                - Resource utilization: {{utilization_target}}
+                - Error rates: {{error_rate_target}}
+          - id: business-metrics
+            title: 业务指标
+            template: |
+                - 开发人员生产力
+                - 部署频率
+                - 变更的平均时间
+                - 恢复的平均时间
+          - id: operational-metrics
+            title: 运维指标
+            template: |
+                - 事件响应时间
+                - 补丁合规性
+                - 每个工作负载的成本
+                - 资源效率
+
+    - id: appendices
+      title: 附录
+      sections:
+          - id: config-reference
+            title: 配置参考
+            instruction: 记录平台实现中使用的所有配置参数及其值。
+          - id: troubleshooting
+            title: 故障排除指南
+            instruction: 提供平台操作的常见问题及其解决方案。
+          - id: security-controls
+            title: 安全控制矩阵
+            instruction: 将实施的安全控制映射到合规要求。
+          - id: integration-points
+            title: 集成点
+            instruction: 记录所有与外部系统和服务的集成点。
+
+    - id: final-review
+      instruction: 最终审查 - 确保所有平台层都正确实现、集成和记录。验证实现是否完全支持 SDAT 方法论和所有代理工作流。确认成功验证基础设施清单。
+      content: |
+          ---
+
+          _平台版本: 1.0_
+          _实现日期: {{implementation_date}}_
+          _下次审查: {{review_date}}_
+          _批准人: {{architect_name}} (architect), {{devops_name}} (DevOps/Platform Engineer)_

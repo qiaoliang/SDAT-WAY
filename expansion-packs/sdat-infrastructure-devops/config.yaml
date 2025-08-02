@@ -1,0 +1,7 @@
+name: sdat-infrastructure-devops
+version: 1.10.0
+short-title: Infrastructure DevOps Pack
+description: >-
+    此扩展包为 SDAT Method 增加了全面的基础设施和 DevOps 能力。它专为那些需要在应用开发的同时，还需要定义、实施和管理云基础设施的团队设计。
+author: Tony (SDAT)
+slashPrefix: sdatInfraDevOps

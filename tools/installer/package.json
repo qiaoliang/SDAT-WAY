@@ -1,0 +1,43 @@
+{
+  "name": "sdat-method",
+  "version": "2.0.1",
+  "description": "SDAT Method installer - AI-powered Agile development framework",
+  "main": "lib/installer.js",
+  "bin": {
+    "sdat": "./bin/sdat.js",
+    "sdat-method": "./bin/sdat.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sdat",
+    "agile",
+    "ai",
+    "development",
+    "framework",
+    "installer",
+    "agents"
+  ],
+  "author": "SDAT Team",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^14.0.0",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.6.3",
+    "js-yaml": "^4.1.0",
+    "ora": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sdat-team/sdat-method.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sdat-team/sdat-method/issues"
+  },
+  "homepage": "https://github.com/sdat-team/sdat-method#readme"
+}

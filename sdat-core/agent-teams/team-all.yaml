@@ -1,0 +1,14 @@
+bundle:
+    name: Team All
+    icon: 👥
+    description: 包含所有的核心系统的 Agent.
+agents:
+    - sdat-orchestrator
+    - "*"
+workflows:
+    - brownfield-fullstack.yaml
+    - brownfield-service.yaml
+    - brownfield-ui.yaml
+    - greenfield-fullstack.yaml
+    - greenfield-service.yaml
+    - greenfield-ui.yaml

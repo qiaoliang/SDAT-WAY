@@ -1,0 +1,424 @@
+template:
+    id: infrastructure-architecture-template-v2
+    name: Infrastructure Architecture
+    version: 2.0
+    output:
+        format: markdown
+        filename: docs/infrastructure-architecture.md
+        title: "{{project_name}} Infrastructure Architecture"
+
+workflow:
+    mode: interactive
+    elicitation: advanced-elicitation
+    custom_elicitation:
+        title: "Infrastructure Architecture Elicitation Actions"
+        sections:
+            - id: infrastructure-overview
+              options:
+                  - "多云服务商策略分析 - 评估云服务商选项及厂商锁定风险"
+                  - "区域分布规划 - 分析延迟要求和数据驻留需求"
+                  - "环境隔离策略 - 设计安全边界和资源隔离"
+                  - "可扩展性模式审查 - 评估自动扩展需求和流量模式"
+                  - "合规性要求分析 - 审查监管和安全合规需求"
+                  - "成本效益分析 - 比较基础设施选项和TCO"
+                  - "进入下一章节"
+
+sections:
+    - id: initial-setup
+      instruction: |
+          初始化设置
+
+          1. 替换 {{project_name}} 为实际项目名称
+          2. 收集并审查所需输入:
+             - 产品需求文档 (PRD) - 用于业务需求和规模需求
+             - 主系统架构 - 用于基础设施依赖
+             - 技术偏好/技术栈文档 - 用于技术选择
+             - PRD 技术假设 - 用于交叉参考仓库和服务架构
+
+          如果任何所需文档缺失，请询问用户："我需要以下文档来创建全面的基础设施架构：[缺失文档列表]。您希望使用现有信息还是先提供缺失的文档？"
+
+          3. <critical_rule>交叉参考 PRD 技术假设，确保基础设施决策与系统架构中做出的仓库和服务架构决策一致。</critical_rule>
+
+          输出文件位置: `docs/infrastructure-architecture.md`
+
+    - id: infrastructure-overview
+      title: Infrastructure Overview
+      instruction: |
+          审查产品需求文档，了解业务需求和规模需求。分析主系统架构，识别基础设施依赖。记录非功能性需求（性能、可扩展性、可靠性、安全性）。交叉参考 PRD 技术假设，确保与仓库和服务架构决策一致。
+      elicit: true
+      custom_elicitation: infrastructure-overview
+      template: |
+          - 云服务商(s)
+          - 核心服务和资源
+          - 区域架构
+          - 多环境策略
+      examples:
+          - |
+              - **云服务商:** AWS (主要), 具有多云能力用于关键服务
+              - **核心服务:** EKS 用于容器编排, RDS 用于数据库, S3 用于存储, CloudFront 用于 CDN
+              - **区域架构:** 多区域主动-被动, 主区域在 us-east-1, DR 区域在 us-west-2
+              - **多环境策略:** 开发、测试、UAT、生产, 具有相同的基础设施模式
+
+    - id: iac
+      title: Infrastructure as Code (IaC)
+      instruction: 根据技术偏好和现有模式定义 IaC 方法。考虑团队专业知识、工具生态系统和维护要求。
+      template: |
+          - 工具和框架
+          - 仓库结构
+          - 状态管理
+          - 依赖管理
+
+          <critical_rule>所有基础设施必须定义为代码。在生产环境中不允许手动创建资源。</critical_rule>
+
+    - id: environment-configuration
+      title: Environment Configuration
+      instruction: 设计环境策略，支持开发工作流，同时保持安全性和成本效率。参考环境过渡策略章节获取详细信息。
+      template: |
+          - 环境推广策略
+          - 配置管理
+          - 密钥管理
+          - 功能标志集成
+      sections:
+          - id: environments
+            repeatable: true
+            title: "{{environment_name}} Environment"
+            template: |
+                - **Purpose:** {{environment_purpose}}
+                - **Resources:** {{environment_resources}}
+                - **Access Control:** {{environment_access}}
+                - **Data Classification:** {{environment_data_class}}
+
+    - id: environment-transition
+      title: Environment Transition Strategy
+      instruction: 详细描述代码和配置变更从开发到生产的完整生命周期。包括治理流程、测试门控和回滚机制。
+      template: |
+          - 开发到生产的交付流水线
+          - 部署阶段与门控
+          - 审批流程与权限
+          - 回滚机制
+          - 变更节奏与发布窗口
+          - 环境特定的配置管理
+
+    - id: network-architecture
+      title: Network Architecture
+      instruction: |
+          设计网络拓扑，考虑安全区域、流量模式和合规要求。参考主架构了解服务通信模式。
+
+          创建 Mermaid 图表显示:
+          - VPC/网络结构
+          - 安全区域和边界
+          - 流量流模式
+          - 负载均衡器放置
+          - 服务网格拓扑 (如果适用)
+      template: |
+          - VPC/VNET 设计
+          - 子网策略
+          - 安全组和 NACLs
+          - 负载均衡器和 API 网关
+          - 服务网格 (如果适用)
+      sections:
+          - id: network-diagram
+            type: mermaid
+            mermaid_type: graph
+            template: |
+                graph TB
+                    subgraph "Production VPC"
+                        subgraph "Public Subnets"
+                            ALB[Application Load Balancer]
+                        end
+                        subgraph "Private Subnets"
+                            EKS[EKS Cluster]
+                            RDS[(RDS Database)]
+                        end
+                    end
+                    Internet((Internet)) --> ALB
+                    ALB --> EKS
+                    EKS --> RDS
+          - id: service-mesh
+            title: Service Mesh Architecture
+            condition: Uses service mesh
+            template: |
+                - **Mesh Technology:** {{service_mesh_tech}}
+                - **Traffic Management:** {{traffic_policies}}
+                - **Security Policies:** {{mesh_security}}
+                - **Observability Integration:** {{mesh_observability}}
+
+    - id: compute-resources
+      title: Compute Resources
+      instruction: 根据应用程序架构（微服务、无服务器、单体）选择计算策略。考虑成本、可扩展性和操作复杂性。
+      template: |
+          - 容器策略
+          - 无服务器架构 Serverless
+          - VM/Instance 配置
+          - 自动扩展方法
+      sections:
+          - id: kubernetes
+            title: Kubernetes Architecture
+            condition: Uses Kubernetes
+            template: |
+                - **Cluster Configuration:** {{k8s_cluster_config}}
+                - **Node Groups:** {{k8s_node_groups}}
+                - **Networking:** {{k8s_networking}}
+                - **Storage Classes:** {{k8s_storage}}
+                - **Security Policies:** {{k8s_security}}
+
+    - id: data-resources
+      title: Data Resources
+      instruction: |
+          根据主系统设计中的数据架构，设计数据基础设施。需综合考虑数据量、访问模式、合规性及恢复需求。
+
+          创建数据流向图，展示以下内容：
+          - 数据库拓扑结构
+          - 数据复制模式
+          - 备份流程
+          - 数据迁移路径
+      template: |
+          - 数据库部署策略
+          - 备份和恢复
+          - 复制和故障转移
+          - 数据迁移策略
+
+    - id: security-architecture
+      title: Security Architecture
+      instruction: 实施深度防御策略。参考 PRD 中的安全要求和合规需求。在适用的情况下考虑零信任原则。
+      template: |
+          - IAM & Authentication
+          - 网络安全性
+          - 数据加密
+          - 合规控制
+          - 安全扫描和监控
+
+          <critical_rule>对所有访问控制实施最小权限原则。所有安全例外必须有业务理由并进行文档记录。</critical_rule>
+
+    - id: shared-responsibility
+      title: Shared Responsibility Model
+      instruction: 明确划分云提供商、平台团队、开发团队和安全团队的责任边界。这对于运维成功至关重要。
+      template: |
+          - 云提供商责任
+          - 平台团队责任
+          - 开发团队责任
+          - 安全团队责任
+          - 运维监控责任
+          - 事件响应责任矩阵
+      examples:
+          - |
+              | 组件                 | 云提供商       | 平台团队      | 开发团队       | 安全团队      |
+              | -------------------- | -------------- | ------------- | -------------- | ------------- |
+              | 物理安全性           | ✓              | -             | -              | 审计          |
+              | 网络安全性           | 部分           | ✓             | 配置           | 审计          |
+              | 应用安全性           | -              | 工具          | ✓              | 审查          |
+              | 数据加密             | 引擎           | 配置          | 实现           | 标准          |
+
+    - id: monitoring-observability
+      title: Monitoring & Observability
+      instruction: 设计全面的可观察性策略，涵盖指标、日志、跟踪和业务关键绩效指标。确保与 SLA/SLO 要求保持一致。
+      template: |
+          - 指标收集
+          - 日志策略
+          - 跟踪实现
+          - 告警和事件响应
+          - 仪表板和可视化
+
+    - id: cicd-pipeline
+      title: CI/CD Pipeline
+      instruction: |
+          设计部署流水线，平衡速度与安全。包括渐进式部署策略和自动化质量门。
+
+          创建流水线图表显示:
+          - 构建阶段
+          - 测试门禁
+          - 部署阶段
+          - 审批点
+          - 回滚触发器
+      template: |
+          - 流水线架构
+          - 构建过程
+          - 部署策略
+          - 回滚过程
+          - 审批门禁
+      sections:
+          - id: progressive-deployment
+            title: 渐进式部署策略
+            condition: 使用渐进式部署
+            template: |
+                - **Canary Deployment:** {{canary_config}}
+                - **Blue-Green Deployment:** {{blue_green_config}}
+                - **Feature Flags:** {{feature_flag_integration}}
+                - **Traffic Splitting:** {{traffic_split_rules}}
+
+    - id: disaster-recovery
+      title: Disaster Recovery
+      instruction: 根据业务连续性要求设计 DR 策略。定义清晰的 RTO/RPO 目标，并确保它们符合业务需求。
+      template: |
+          - 备份策略
+          - 恢复过程
+          - RTO & RPO 目标
+          - DR 测试方法
+
+          <critical_rule>DR 过程必须至少每季度测试一次。记录测试结果并采取改进措施。</critical_rule>
+
+    - id: cost-optimization
+      title: Cost Optimization
+      instruction: 平衡成本效率与性能和可靠性要求。包括短期优化和长期策略。
+      template: |
+          - 资源规模策略
+          - 预留实例/承诺
+          - 成本监控和报告
+          - 优化建议
+
+    - id: sdat-integration
+      title: SDAT Integration Architecture
+      instruction: 设计基础设施，专门支持其他 SDAT 代理及其工作流。这确保了基础设施支持整个 SDAT 方法论。
+      sections:
+          - id: dev-agent-support
+            title: 开发代理支持
+            template: |
+                - 容器平台用于开发环境
+                - GitOps 工作流用于应用部署
+                - 服务网格集成用于开发测试
+                - 开发者自助服务平台能力
+          - id: product-architecture-alignment
+            title: 产品与架构对齐
+            template: |
+                - 基础设施实现 PRD 可扩展性要求
+                - 部署自动化支持产品迭代速度
+                - 服务可靠性满足产品 SLA
+                - 架构模式在基础设施中正确实现
+          - id: cross-agent-integration
+            title: 跨代理集成点
+            template: |
+                - CI/CD 流水线支持前端、后端和全栈开发工作流
+                - 监控和可观察性数据可供 QA 和 DevOps 代理访问
+                - 基础设施支持设计架构师的 UI/UX 性能要求
+                - 平台支持分析师的数据收集和分析需求
+
+    - id: feasibility-review
+      title: DevOps/平台工程可行性审查
+      instruction: |
+          关键步骤 - 向 DevOps/平台工程代理展示架构蓝图摘要，进行可行性审查。请求特定反馈:
+
+          - **Operational Complexity:** 提出的模式是否可以与当前工具和专业知识实现？
+          - **Resource Constraints:** 基础设施需求是否与可用资源和预算一致？
+          - **Security Implementation:** 安全模式是否可以与当前安全工具链实现？
+          - **Operational Overhead:** 提出的架构是否会导致过度的运维负担？
+          - **Technology Constraints:** 选定的技术是否与现有基础设施兼容？
+
+          记录所有可行性反馈和提出的问题。根据运维约束和反馈迭代架构决策。
+
+          <critical_rule>在继续进行最终架构文档之前，解决所有关键可行性问题。如果识别到关键障碍，请在继续之前修订架构。</critical_rule>
+      sections:
+          - id: feasibility-results
+            title: 可行性评估结果
+            template: |
+                - **绿灯项目:** {{feasible_items}}
+                - **黄灯项目:** {{items_needing_adjustment}}
+                - **红灯项目:** {{items_requiring_redesign}}
+                - **缓解策略:** {{mitigation_plans}}
+
+    - id: infrastructure-verification
+      title: 基础设施验证
+      sections:
+          - id: validation-framework
+            title: 验证框架
+            content: |
+                此基础设施架构将使用全面的 `infrastructure-checklist.md` 进行验证，特别关注第 12 节：架构文档验证。清单确保：
+
+                - 架构文档的完整性
+                - 与更广泛的系统架构的一致性
+                - 不同利益相关者的适当详细程度
+                - 清晰的实施指导
+                - 未来演进考虑
+          - id: validation-process
+            title: 验证过程
+            content: |
+                架构文档验证应在以下时刻执行:
+
+                - 初始架构开发后
+                - 重大架构变更后
+                - 主要实施阶段前
+                - 定期架构审查期间
+
+                平台工程师应使用基础设施清单系统地验证此架构文档的所有方面。
+
+    - id: implementation-handoff
+      title: 实施交接
+      instruction: 为实施团队创建结构化的交接文档。这确保了架构决策得到正确传达和实施。
+      sections:
+          - id: adrs
+            title: 架构决策记录 (ADRs)
+            content: |
+                为关键基础设施决策创建 ADRs:
+
+                - 云提供商选择理由
+                - 容器编排平台选择
+                - 网络架构决策
+                - 安全实现选择
+                - 成本优化权衡
+          - id: implementation-validation
+            title: 实施验证标准
+            content: |
+                定义验证正确实施的具体标准:
+
+                - Infrastructure as Code 质量门禁
+                - 安全合规检查点
+                - 性能基准
+                - 成本目标
+                - 运维准备标准
+          - id: knowledge-transfer
+            title: 知识转移要求
+            template: |
+                - 运维团队的技术文档
+                - 运行手册创建要求
+                - 平台团队培训需求
+                - 交接会议议程项目
+
+    - id: infrastructure-evolution
+      title: 基础设施演进
+      instruction: 记录基础设施的长期愿景和演进路径。考虑技术趋势、预期增长和技术债务管理。
+      template: |
+          - 技术债务清单
+          - 计划升级和迁移
+          - 弃用计划
+          - 技术路线图
+          - Capacity Planning
+          - 可扩展性考虑
+
+    - id: app-integration
+      title: 与应用架构集成
+      instruction: 将基础设施组件映射到应用服务。确保基础设施设计支持应用需求和主架构中定义的模式。
+      template: |
+          - 服务到基础设施映射
+          - 应用依赖矩阵
+          - 性能要求实现
+          - 安全要求实现
+          - 数据流到基础设施相关性
+          - API 网关和 Service Mesh 集成
+
+    - id: cross-team-collaboration
+      title: 跨团队协作
+      instruction: 定义团队之间的清晰接口和通信模式。本节对于运维成功至关重要，应包括特定接触点和升级路径。
+      template: |
+          - 平台工程师和开发者接触点
+          - 前端/后端集成要求
+          - 产品需求到基础设施映射
+          - 架构决策影响分析
+          - 设计架构师 UI/UX 基础设施要求
+          - 分析师研究集成
+
+    - id: change-management
+      title: 基础设施变更管理
+      instruction: 定义基础设施变更的结构化流程。包括风险评估、测试要求和回滚程序。
+      template: |
+          - 变更请求流程
+          - 风险评估
+          - 测试策略
+          - 验证流程
+
+    - id: final-review
+      instruction: 最终审查 - 确保所有部分完整且一致。验证可行性审查已进行并解决所有问题。应用最终验证到基础设施清单。
+      content: |
+          ---
+
+          _文档版本: 1.0_
+          _最后更新: {{current_date}}_
+          _下次审查: {{review_date}}_
