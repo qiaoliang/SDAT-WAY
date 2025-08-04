@@ -279,7 +279,7 @@ sections:
                 **错误处理:** {{error_handling_strategy}}
 
     - id: source-tree-integration
-      title: 源树集成
+      title: srouce tree
       instruction: |
           定义新代码如何与现有项目结构集成：
 
