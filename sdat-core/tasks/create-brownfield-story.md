@@ -2,7 +2,7 @@
 
 ## 目的
 
-Create a detailed, implementable story for a brownfield project with non-standard documentation.document-project output, brownfield PRD, epics, or user documentation and a Dev agent-executable story.为具有非标准文档的 brownfield 项目创建详细、可实施的 story。此 task 弥合了各种文档格式（`document-project` 输出、brownfield PRD、epic 或用户文档与 Dev agent 可执行的 story 之间的差距。）
+为具有非标准文档的 brownfield 项目创建详细、可实现的 story。此 task 弥合了各种文档格式（`document-project` 输出、brownfield PRD、epic 或用户文档与 Dev agent 可执行的 story 之间的差距。）
 
 ## 何时使用此任务
 
@@ -44,12 +44,12 @@ Create a detailed, implementable story for a brownfield project with non-standar
 
 - **来自 Brownfield PRD**：从 epic 部分提取 story
 - **来自 Epic 文件**：读取 epic 定义和 story 列表
-- **来自用户指导**：询问用户要实施哪个具体增强
+- **来自用户指导**：询问用户要实现哪个具体增强
 - **无明确来源**：与用户合作定义 story 范围
 
 #### 1.2收集基本上下文
 
-**关键**：对于 brownfield story，您必须收集足够的上下文以安全实施。如果信息缺失，请准备好询问用户。
+**关键**：对于 brownfield story，您必须收集足够的上下文以安全实现。如果信息缺失，请准备好询问用户。
 
 **必需信息清单**：
 
@@ -144,7 +144,7 @@ so that {{value_delivered}}.
 
 ### 4.带安全检查的任务生成
 
-#### 4.1生成实施任务
+#### 4.1生成实现任务
 
 根据收集的上下文创建任务：如果系统理解不完整，则包括探索任务为现有功能添加验证任务包括回滚考虑
 
@@ -202,7 +202,7 @@ Task 3:
 
 在最终确定之前：
 
-1. **完整性检查**：Story 有明确的范围和验收标准技术上下文足以实施集成方法已定义风险已识别并缓解
+1. **完整性检查**：Story 有明确的范围和验收标准技术上下文足以实现集成方法已定义风险已识别并缓解
 
 2. **安全检查**：包括对现有功能的保护回滚计划是可行的测试涵盖新功能和现有功能
 
@@ -258,7 +258,7 @@ Next Steps:
 
 当 brownfield story 创建成功时：
 
-1. 可以在不要求 dev 搜索多个文档的情况下实施 story
+1. 可以在不要求 dev 搜索多个文档的情况下实现 story
 2. 集成方法清晰且对现有系统安全
 3. 所有可用的技术上下文都已提取和组织
 4. 缺失的信息已识别和解决

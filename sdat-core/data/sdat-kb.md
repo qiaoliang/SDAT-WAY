@@ -24,7 +24,7 @@
 
 SDAT transforms you into a "Vibe CEO" - directing a team of specialized AI agents through structured workflows. Here's how:SDAT 将您转变为“氛围 CEO”——通过结构化的工作流程指导一支专业的 AI agent 团队。方法如下：
 
-1. **You Direct, AI Executes**: You provide vision and decisions;**您指导，AI 执行**：您提供愿景和决策；agent 处理实施细节
+1. **You Direct, AI Executes**: You provide vision and decisions;**您指导，AI 执行**：您提供愿景和决策；agent 处理实现细节
 2. **Specialized Agents**:PM, Developer, Architect, etc.**专业 Agent**：每个 agent 精通一个角色（pm、dev、architect 等）
 3. **Structured Workflows**:**结构化工作流**：经过验证的模式指导您从想法到部署代码
 4. **Clean Handoffs**:**清晰的交接**：全新的上下文窗口确保 agent 保持专注和高效
@@ -35,7 +35,7 @@ SDAT transforms you into a "Vibe CEO" - directing a team of specialized AI agent
 
 - Create once,一次创建，贯穿整个开发过程
 
-#### Phase 2:IDE - Implementation阶段 2：开发IDE - 实施将文档分片成易于管理的部分
+#### Phase 2:IDE - Implementation阶段 2：开发IDE - 实现将文档分片成易于管理的部分
 
 - Execute focused SM →执行专注的 sm → dev 周期
 - One story at a time,一次一个 story，顺序进行实时文件操作和测试
@@ -106,7 +106,7 @@ npx sdat-method install
 
 **Use Web UI for**:**使用 Web UI 用于**：PRD, architecture初始规划和文档（PRD、架构）especially with Gemini经济高效的文档创建（尤其是在使用 Gemini 时）头脑风暴和分析阶段多 agent 咨询和规划
 
-**Use IDE for**:**使用 IDE 用于**：积极的开发和编码文件操作和项目集成文档分片和 story 管理SM/Dev cycles实施工作流（sm/dev 周期）
+**Use IDE for**:**使用 IDE 用于**：积极的开发和编码文件操作和项目集成文档分片和 story 管理SM/Dev cycles实现工作流（sm/dev 周期）
 
 **Cost-Saving Tip**:PRDs, architecture in web UI, then copy to `docs/prd.md` and `docs/architecture.md` in your project before switching to IDE for development.**省钱技巧**：在 Web UI 中创建大型文档（PRD、架构，然后在切换到 IDE 进行开发之前将其复制到项目中的 `docs/prd.md` 和 `docs/architecture.md`。）
 
@@ -136,15 +136,15 @@ npx sdat-method install
 **CRITICAL RULE for Development**:**开发的关键规则**：
 
 - **ALWAYS use SM agent for story creation\*\***始终使用 sm agent 创建 story\*\* - 切勿使用 sdat-master 或 sdat-orchestrator
-- **ALWAYS use Dev agent for implementation\*\***始终使用 dev agent 进行实施\*\* - 切勿使用 sdat-master 或 sdat-orchestrator
+- **ALWAYS use Dev agent for implementation\*\***始终使用 dev agent 进行实现\*\* - 切勿使用 sdat-master 或 sdat-orchestrator
 - **Why this matters**:**为什么重要**：sm 和 dev agent 专门针对开发工作流进行了优化
-- **No exceptions**: Even if using sdat-master for everything else, switch to SM →**没有例外**：即使将 sdat-master 用于其他所有事情，也要切换到 sm → dev 进行实施
+- **No exceptions**: Even if using sdat-master for everything else, switch to SM →**没有例外**：即使将 sdat-master 用于其他所有事情，也要切换到 sm → dev 进行实现
 
 **Best Practice for IDE-Only**:**仅 IDE 的最佳实践**：
 
 1. Use PM/Architect/better than sdat-master使用 pm/architect/ux agent 进行规划（比 sdat-master 更好）2.直接在项目中创建文档 3.创建后立即分片
 2. **MUST switch to SM agent\*\***必须切换到 sm agent\*\* 进行 story 创建
-3. **MUST switch to Dev agent\*\***必须切换到 dev agent\*\* 进行实施 6.将规划和编码保留在单独的聊天会话中
+3. **MUST switch to Dev agent\*\***必须切换到 dev agent\*\* 进行实现 6.将规划和编码保留在单独的聊天会话中
 
 ## core-config.yaml核心配置core-config.yaml
 
@@ -460,8 +460,8 @@ Resulting Folder Structure:生成的文件夹结构：
     - Review generated story in `docs/stories/`在 `docs/stories/` 中查看生成的 story
     - Update status from "Draft" to "Approved"将状态从“草稿”更新为“已批准”
 
-    **Step 2 - Story Implementation**:**步骤 2 - Story 实施**：
-    - **NEW CLEAN CHAT** → `@dev`**新的干净聊天** → `@dev`Agent 询问要实施哪个 story包含 story 文件内容以节省 dev agent 查找时间
+    **Step 2 - Story Implementation**:**步骤 2 - Story 实现**：
+    - **NEW CLEAN CHAT** → `@dev`**新的干净聊天** → `@dev`Agent 询问要实现哪个 story包含 story 文件内容以节省 dev agent 查找时间
     - Dev follows tasks/subtasks,dev 遵循 task/subtask，标记完成dev 维护所有更改的文件列表
     - Dev marks story as "Review"dev 在所有测试通过后将 story 标记为“审查”
 
@@ -597,7 +597,7 @@ Use the `shard-doc` task or `@kayvan/markdown-tree-parser` tool for automatic sh
 
 **Web UI Best For**:**Web UI 最适合**：初始规划和文档阶段经济高效的大型文档创建Agent 咨询和头脑风暴与 orchestrator 的多 agent 工作流
 
-**IDE Best For**:**IDE 最适合**：积极的开发和实施文件操作和项目集成Story 管理和开发周期代码审查和调试
+**IDE Best For**:**IDE 最适合**：积极的开发和实现文件操作和项目集成Story 管理和开发周期代码审查和调试
 
 ### 质量保证为专门的 task 使用适当的 agent遵循敏捷仪式和审查流程与 po agent 保持文档一致性使用清单和模板进行定期验证
 

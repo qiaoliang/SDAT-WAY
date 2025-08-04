@@ -28,7 +28,7 @@ workflow:
               single_story:
                   agent: pm
                   uses: brownfield-create-story
-                  notes: "为立即实施创建单一用户故事。创建完成后退出工作流。"
+                  notes: "为立即实现创建单一用户故事。创建完成后退出工作流。"
               small_feature:
                   agent: pm
                   uses: brownfield-create-epic
@@ -261,7 +261,7 @@ workflow:
     handoff_prompts:
         classification_complete: |
             增强分类为：{{enhancement_type}}
-            {{if single_story}}：使用 brownfield-create-story 任务进行立即实施。
+            {{if single_story}}：使用 brownfield-create-story 任务进行立即实现。
             {{if small_feature}}：使用 brownfield-create-epic 任务创建聚焦史诗。
             {{if major_enhancement}}：继续执行全面规划工作流。
 

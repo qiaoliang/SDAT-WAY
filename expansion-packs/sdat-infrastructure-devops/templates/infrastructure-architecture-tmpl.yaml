@@ -180,7 +180,7 @@ sections:
 
     - id: security-architecture
       title: Security Architecture
-      instruction: 实施深度防御策略。参考 PRD 中的安全要求和合规需求。在适用的情况下考虑零信任原则。
+      instruction: 实现深度防御策略。参考 PRD 中的安全要求和合规需求。在适用的情况下考虑零信任原则。
       template: |
           - IAM & Authentication
           - 网络安全性
@@ -188,7 +188,7 @@ sections:
           - 合规控制
           - 安全扫描和监控
 
-          <critical_rule>对所有访问控制实施最小权限原则。所有安全例外必须有业务理由并进行文档记录。</critical_rule>
+          <critical_rule>对所有访问控制实现最小权限原则。所有安全例外必须有业务理由并进行文档记录。</critical_rule>
 
     - id: shared-responsibility
       title: Shared Responsibility Model
@@ -326,7 +326,7 @@ sections:
                 - 架构文档的完整性
                 - 与更广泛的系统架构的一致性
                 - 不同利益相关者的适当详细程度
-                - 清晰的实施指导
+                - 清晰的实现指导
                 - 未来演进考虑
           - id: validation-process
             title: 验证过程
@@ -335,14 +335,14 @@ sections:
 
                 - 初始架构开发后
                 - 重大架构变更后
-                - 主要实施阶段前
+                - 主要实现阶段前
                 - 定期架构审查期间
 
                 平台工程师应使用基础设施清单系统地验证此架构文档的所有方面。
 
     - id: implementation-handoff
-      title: 实施交接
-      instruction: 为实施团队创建结构化的交接文档。这确保了架构决策得到正确传达和实施。
+      title: 实现交接
+      instruction: 为实现团队创建结构化的交接文档。这确保了架构决策得到正确传达和实现。
       sections:
           - id: adrs
             title: 架构决策记录 (ADRs)
@@ -355,9 +355,9 @@ sections:
                 - 安全实现选择
                 - 成本优化权衡
           - id: implementation-validation
-            title: 实施验证标准
+            title: 实现验证标准
             content: |
-                定义验证正确实施的具体标准:
+                定义验证正确实现的具体标准:
 
                 - Infrastructure as Code 质量门禁
                 - 安全合规检查点

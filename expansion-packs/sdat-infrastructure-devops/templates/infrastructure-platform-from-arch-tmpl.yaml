@@ -33,10 +33,10 @@ sections:
           2. 收集并审查所需输入材料：
              - **基础设施架构文档**（主要输入，必需）
              - 基础设施变更请求（如适用）
-             - 基础设施实施指南
+             - 基础设施实现指南
              - 技术栈文档
              - 基础设施检查清单
-             - 注意：如缺少基础设施架构文档，请立即暂停并提示：“需要提供基础设施架构文档，才能继续平台实施。该文档定义了本次实施所依据的基础设施设计。”
+             - 注意：如缺少基础设施架构文档，请立即暂停并提示：“需要提供基础设施架构文档，才能继续平台实现。该文档定义了本次实现所依据的基础设施设计。”
 
           3. 验证基础设施架构已审查并批准
           4. <critical_rule>所有平台实现必须与批准的基础设施架构保持一致。任何偏差需要架构师批准。</critical_rule>
@@ -45,16 +45,16 @@ sections:
 
     - id: executive-summary
       title: 执行摘要
-      instruction: 提供平台基础设施实施的高级概述，参考基础设施架构文档的关键决策和要求。
+      instruction: 提供平台基础设施实现的高级概述，参考基础设施架构文档的关键决策和要求。
       template: |
-          - 平台实施范围和目标
-          - 正在实施的关键架构决策
+          - 平台实现范围和目标
+          - 正在实现的关键架构决策
           - 预期结果和收益
           - 时间线和里程碑
 
     - id: joint-planning
       title: 联合规划会议
-      instruction: 记录 DevOps/平台工程师与架构师之间的协作规划会议。这确保在实施开始前保持一致。
+      instruction: 记录 DevOps/平台工程师与架构师之间的协作规划会议。这确保在实现开始前保持一致。
       sections:
           - id: architecture-alignment
             title: 架构对齐审查
@@ -62,9 +62,9 @@ sections:
                 - 基础设施架构文档的审查
                 - 设计决策的确认
                 - 识别任何歧义或差距
-                - 实施方法的一致性
+                - 实现方法的一致性
           - id: implementation-strategy
-            title: 实施策略协作
+            title: 实现策略协作
             template: |
                 - 平台层序列
                 - 技术栈验证
@@ -78,7 +78,7 @@ sections:
                 - 时间线考虑
                 - 合规性和安全要求
           - id: validation-planning
-            title: 实施验证规划
+            title: 实现验证规划
             template: |
                 - 每个平台层的成功标准
                 - 测试方法和验收标准
@@ -545,11 +545,11 @@ sections:
                 - 知识库
 
     - id: implementation-review
-      title: 实施审查
-      instruction: 与架构师进行后实施审查，以验证一致性并捕获学习成果。
+      title: 实现审查
+      instruction: 与架构师进行后实现审查，以验证一致性并捕获学习成果。
       sections:
           - id: implementation-validation
-            title: 实施验证
+            title: 实现验证
             template: |
                 - 架构一致性验证
                 - 偏差文档
@@ -579,7 +579,7 @@ sections:
 
     - id: platform-metrics
       title: 平台指标 & KPIs
-      instruction: 定义和实施关键绩效指标，以衡量平台成功。
+      instruction: 定义和实现关键绩效指标，以衡量平台成功。
       sections:
           - id: technical-metrics
             title: 技术指标
@@ -614,7 +614,7 @@ sections:
             instruction: 提供平台操作的常见问题及其解决方案。
           - id: security-controls
             title: 安全控制矩阵
-            instruction: 将实施的安全控制映射到合规要求。
+            instruction: 将实现的安全控制映射到合规要求。
           - id: integration-points
             title: 集成点
             instruction: 记录所有与外部系统和服务的集成点。

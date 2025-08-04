@@ -61,7 +61,7 @@ sections:
       sections:
           - id: immediate-opportunities
             title: 当下的机会
-            content: "*现在可以实施的想法*"
+            content: "*现在可以实现的想法*"
             repeatable: true
             type: numbered-list
             template: |

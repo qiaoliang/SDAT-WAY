@@ -23,7 +23,7 @@
 3. **Web vs IDE** - 何时使用每个环境
 4. **agents** - 理解专业代理及其角色
 5. **doc** - PRD、架构、故事等
-6. **Agile flow** - SDAT如何实施敏捷方法
+6. **Agile flow** - SDAT如何实现敏捷方法
 7. **config** - 为您的需求定制SDAT
 8. **bese practice** - 有效使用SDAT的技巧
 
