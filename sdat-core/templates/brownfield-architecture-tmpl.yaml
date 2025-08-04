@@ -186,7 +186,7 @@ sections:
 
           1. 识别增强所需的新组件
           2. 定义与现有组件的接口
-          3. 建立清晰的边界和责任
+          3. 建立清晰的边界和职责
           4. 计划集成点和数据流
 
           **强制验证:** 在呈现组件架构之前，确认："我建议的新组件遵循我在您的代码库中识别的现有架构模式：[特定模式]。这些集成接口尊重您当前的组件结构和通信模式。这与您的项目现实是否一致？"
@@ -199,7 +199,7 @@ sections:
                 - id: component
                   title: "{{component_name}}"
                   template: |
-                      **责任:** {{component_description}}
+                      **职责:** {{component_description}}
                       **集成点:** {{integration_points}}
 
                       **关键接口:**

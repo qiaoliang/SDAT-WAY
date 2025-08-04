@@ -272,7 +272,7 @@ sections:
                 **以便**: {{benefit}}
             sections:
                 - id: acceptance-criteria
-                  title: 接受标准
+                  title: 验收标准
                   type: numbered-list
                   instruction: 定义包括新功能和现有系统完整性的标准
                   item_template: "{{criterion_number}}: {{criteria}}"

@@ -81,7 +81,7 @@ sections:
             title: 实施验证规划
             template: |
                 - 每个平台层的成功标准
-                - 测试方法和接受标准
+                - 测试方法和验收标准
                 - 回滚策略
                 - 沟通计划
           - id: documentation-planning
@@ -539,7 +539,7 @@ sections:
           - id: handoff-procedures
             title: 交接程序
             template: |
-                - 团队责任
+                - 团队职责
                 - 升级程序
                 - 支持模型
                 - 知识库

@@ -199,7 +199,7 @@ sections:
           2. 考虑 PRD 中的仓库结构（单体/多体）
           3. 定义组件之间的清晰边界和接口
           4. 对于每个组件，指定：
-            - 主要责任
+            - 主要职责
             - 关键接口/API
             - 其他组件的依赖
             - 基于技术栈选择的技术细节
@@ -211,7 +211,7 @@ sections:
             repeatable: true
             title: "{{component_name}}"
             template: |
-                **责任:** {{component_description}}
+                **职责:** {{component_description}}
 
                 **关键接口:**
                 - {{interface_1}}

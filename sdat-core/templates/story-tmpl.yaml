@@ -13,13 +13,13 @@ workflow:
 
 agent_config:
     editable_sections:
-        - 状态
-        - 故事
-        - 接受标准
-        - 任务 / 子任务
-        - 开发备注事项
-        - 测试
-        - 变更日志
+        - status
+        - story
+        - acceptance-criteria
+        - tasks-subtasks
+        - dev-notes
+        - testing-standards
+        - change-log
 
 sections:
     - id: status
@@ -45,7 +45,7 @@ sections:
     - id: acceptance-criteria
       title: 验收标准
       type: numbered-list
-      instruction: 从史诗文件中复制接受标准的编号列表
+      instruction: 从史诗文件中复制验收标准的编号列表
       elicit: true
       owner: scrum-master
       editors: [scrum-master]
@@ -68,7 +68,7 @@ sections:
       editors: [scrum-master, dev-agent]
 
     - id: dev-notes
-      title: 开发笔记
+      title: 开发相关备注事项
       instruction: |
           填充相关信息，仅从文档文件夹中提取与故事相关的实际工件：
           - 不要编造信息
@@ -78,18 +78,18 @@ sections:
       elicit: true
       owner: scrum-master
       editors: [scrum-master]
-      sections:
-          - id: testing-standards
-            title: 测试
-            instruction: |
-                列出架构师需要遵循的相关测试标准：
-                - 测试文件位置
-                - 测试标准
-                - 使用的测试框架和模式
-                - 此故事的任何特定测试要求
-            elicit: true
-            owner: scrum-master
-            editors: [scrum-master]
+
+    - id: testing-standards
+      title: 测试标准
+      instruction: |
+          列出架构师需要遵循的相关测试标准：
+          - 测试文件位置
+          - 测试标准
+          - 使用的测试框架和模式
+          - 此故事的任何特定测试要求
+      elicit: true
+      owner: scrum-master
+      editors: [scrum-master]
 
     - id: change-log
       title: 变更日志
