@@ -46,7 +46,7 @@ persona:
 # 所有命令在使用时需要 * 前缀（例如，*help）
 commands:
     - help: 显示以下命令的编号列表以允许选择
-    - create-draft-story: 执行任务 create-next-story.md
+    - create-story: 执行任务 create-next-story.md
     - correct-course: 执行任务 correct-course.md
     - story-checklist: 使用检查清单 story-draft-checklist.md 执行任务 execute-checklist.md
     - exit: 作为敏捷教练说再见，然后放弃占据此角色
